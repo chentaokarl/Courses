@@ -1,0 +1,11 @@
+To-dos:
+Server.java
+	1. init(): Initialize socket server, waiting for connecting
+	2. checkLogin(): When client connect, check if user name is valid
+	3. initTable(): keep adding user to table until full(4).
+	4. shuffle(): shuffle cards
+Message.java
+	1. Types: cardsdeliver, text, playcard
+Card.java
+	1. variales: type, 
+	
