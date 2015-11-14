@@ -80,7 +80,7 @@ public class TableFrame extends JFrame {
 
 	public static void main(String[] args) {
 		TableFrame.getInstance();
-		SouthPanel.getInstance().initCardsPanel(new String[] { "c8", "d9" });
+//		SouthPanel.getInstance().initCardsPanel(new String[] { "c8", "d9" });
 	}
 
 }
