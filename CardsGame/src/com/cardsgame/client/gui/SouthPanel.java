@@ -3,6 +3,7 @@
  */
 package com.cardsgame.client.gui;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
@@ -134,7 +135,9 @@ public class SouthPanel extends JPanel {
 		southDisplayArea.setColumns(20);
 		southDisplayArea.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
 		southDisplayArea.setRows(5);
-		southDisplayArea.setText("Hint:\n1. Select one card of\nyours.\n2. Click 'Play'Button \nto play out cards.");
+		southDisplayArea.setLineWrap(true);
+		southDisplayArea.setText(Util.DEFAULT_HINT);
+		southDisplayArea.setEditable(false);
 		southJScrollPane1.setViewportView(southDisplayArea);
 
 

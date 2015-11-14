@@ -4,6 +4,7 @@
 package com.cardsgame.client.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.JLabel;

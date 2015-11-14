@@ -4,9 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class TableFrame extends JFrame {
 	JPanel southPanel = SouthPanel.getInstance();
@@ -80,7 +83,5 @@ public class TableFrame extends JFrame {
 
 	public static void main(String[] args) {
 		TableFrame.getInstance();
-//		SouthPanel.getInstance().initCardsPanel(new String[] { "c8", "d9" });
 	}
-
 }
