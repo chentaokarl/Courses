@@ -10,6 +10,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 
+import com.cardsgame.client.gui.SouthPanel;
+
 enum KEY {
     UP, RIGHT, DOWN, LEFT, RIGHT_UP, RIGHT_DOWN, LEFT_UP, LEFT_DOWN
 }
@@ -29,6 +31,7 @@ public class Test {
     static final int STEP = 2;
     KEY key;
     HORIZION hor;
+    JLabel card = new JLabel(new ImageIcon(Test.class.getResource("c7.jpg")));
     VERTICAL ver;
 
     public Test() {
@@ -120,6 +123,7 @@ public class Test {
             }
         });
 
+        win.add(card);
         win.add(lb);
         win.getContentPane().setBackground(Color.WHITE);
         win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
