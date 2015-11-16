@@ -11,7 +11,7 @@ public class Util {
 	public final static String DEFAULT_HINT = "Hint:\nWhen it's your turn,\ndouble click to play \nout one of your cards. ";
 	private final static ImageIcon playerImage =  new ImageIcon(Util.class.getResource(DEFAULT_PLAYER_IMAGE));
 	private final static ImageIcon cardbackImage =  new ImageIcon(Util.class.getResource(DEFAULT_CARD_BACK_IMAGE));
-	private static boolean isMyTurnFlag = false; //to indicate my turn or not. Only In my turn, I can play out card.
+	private static boolean isMyTurnFlag = true; //to indicate my turn or not. Only In my turn, I can play out card.
 	private static boolean gameStartFlag = false;// to indicate game starts or not.
 	
 	public static JLabel getPlayerLabel(String labelName, ImageIcon newImage) {

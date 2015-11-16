@@ -47,6 +47,7 @@ public class SouthPanel extends JPanel {
 		if (Util.isMyTurnFlag()) {
 
 			JLabel source = (JLabel) evt.getSource();
+			CenterPanel.getInstance().changeCardPlayed(source.getName());
 			cardsDisplayPanel.remove(source);
 			source = null;
 			cardsDisplayPanel.repaint();
@@ -61,6 +62,7 @@ public class SouthPanel extends JPanel {
 	public void initCardsPanel(String[] cards) {
 		for (int i = 0; i < cards.length; i++) {
 			JLabel card = new JLabel(Util.getImage(cards[i]));
+			card.setName(cards[i]);
 			card.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent evt) {
 					if (evt.getClickCount() == 2) {

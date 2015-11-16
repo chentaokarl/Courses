@@ -40,7 +40,9 @@ public class CenterPanel extends JPanel {
 	public void changeCardPlayed(String imgName) {
 		centerWCardPlayed.setIcon(Util.getImage(imgName));
 		centerECardPlayed.setIcon(Util.getImage(imgName));
-
+		centerSCardPlayed.setIcon(Util.getImage(imgName));
+		centerNCardPlayed.setIcon(Util.getImage(imgName));
+		
 		centerDisplayArea.setText(imgName);
 		revalidate();
 		repaint();
