@@ -16,7 +16,7 @@ import javax.swing.JPanel;
  */
 public class NorthPanel extends JPanel {
 
-	private static NorthPanel northPanel = new NorthPanel();
+	private static NorthPanel northPanel ;
 	private javax.swing.JLabel northCardImg;
 	private javax.swing.JLabel northCardsNum;
 	private javax.swing.JLabel northPlayerImage;
@@ -30,7 +30,10 @@ public class NorthPanel extends JPanel {
 	}
 	
 	public static NorthPanel getInstance() {
-		northPanel.initComp();
+		if (null == northPanel) {
+			northPanel = new NorthPanel();
+			northPanel.initComp();
+		}
 		return northPanel;
 	}
 

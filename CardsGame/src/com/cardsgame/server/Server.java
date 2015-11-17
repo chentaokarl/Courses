@@ -169,6 +169,10 @@ public class Server {
 		Socket sk;
 		ObjectOutputStream os;
 		ListMessage lmsg = new ListMessage();
+		
+		public SendMsg() {
+			// TODO Auto-generated constructor stub
+		}
 
 		public void run() {
 			try {

@@ -14,7 +14,7 @@ import javax.swing.JPanel;
  */
 public class CenterPanel extends JPanel {
 
-	private static CenterPanel centerPanel = new CenterPanel();
+	private static CenterPanel centerPanel;
 	private javax.swing.JTextArea centerDisplayArea;
 	private javax.swing.JLabel centerECardPlayed;
 	private javax.swing.JLabel centerNCardPlayed;
@@ -26,31 +26,60 @@ public class CenterPanel extends JPanel {
 	private javax.swing.JPanel centerSCardPanel;
 	private javax.swing.JPanel centerWCardPanel;
 	private int i = 1;
+	private int myPosition = 0;
 
 	private CenterPanel() {
 		super();
 	}
 
 	public static CenterPanel getInstance() {
-		centerPanel.setBackground(Color.WHITE);
-		centerPanel.initComp();
+		if (null == centerPanel) {
+			centerPanel = new CenterPanel();
+			centerPanel.setBackground(Color.WHITE);
+			centerPanel.initComp();
+		}
 		return centerPanel;
 	}
 
-	public void changeCardPlayed(String imgName) {
-		centerWCardPlayed.setIcon(Util.getImage(imgName));
-		centerECardPlayed.setIcon(Util.getImage(imgName));
-		centerSCardPlayed.setIcon(Util.getImage(imgName));
-		centerNCardPlayed.setIcon(Util.getImage(imgName));
+	public void changeCardPlayed(String imgName, String position) {
+		if (position.equals(""+myPosition) || position.equals("-1")) {
+			centerSCardPlayed.setIcon(Util.getImage(imgName));
+		}else if (position.equals(centerWCardPlayed.getName())) {
+			centerWCardPlayed.setIcon(Util.getImage(imgName));
+		}else if (position.equals(centerECardPlayed.getName())) {
+			centerECardPlayed.setIcon(Util.getImage(imgName));
+		}else if (position.equals(centerNCardPlayed.getName())) {
+			centerNCardPlayed.setIcon(Util.getImage(imgName));
+		}
 		
 		centerDisplayArea.setText(imgName);
 		revalidate();
 		repaint();
 	}
 
-	private void cardMouseClicked(MouseEvent evt) {
-		changeCardPlayed("c" + i);
-		i++;
+//	private void cardMouseClicked(MouseEvent evt) {
+//	}
+//	
+	public void InitCardLabelNum(int myPosition){
+		this.myPosition = myPosition;
+		centerSCardPlayed.setName("" + myPosition);
+		int position = myPosition + 1;
+		if (position > 4) {
+			position = 1;
+		}
+		centerECardPlayed.setName("" + position);
+		
+		position ++;
+		if (position > 4) {
+			position = 1;
+		}
+		centerNCardPlayed.setName("" + position);
+		
+		position ++;
+		if (position > 4) {
+			position = 1;
+		}
+		centerWCardPlayed.setName("" + position);
 	}
 
 	private void initComp() {
@@ -76,14 +105,14 @@ public class CenterPanel extends JPanel {
 		centerNCardPanel.setBackground(Color.white);
 		centerSCardPanel.setBackground(Color.white);
 
-		centerWCardPlayed.addMouseListener(new java.awt.event.MouseAdapter() {
-			public void mouseClicked(java.awt.event.MouseEvent evt) {
-				if (evt.getClickCount() == 2) {
-					cardMouseClicked(evt);
-				}
-			}
-
-		});
+//		centerWCardPlayed.addMouseListener(new java.awt.event.MouseAdapter() {
+//			public void mouseClicked(java.awt.event.MouseEvent evt) {
+//				if (evt.getClickCount() == 2) {
+//					cardMouseClicked(evt);
+//				}
+//			}
+//
+//		});
 
 		centerDisplayArea.setColumns(20);
 		centerDisplayArea.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N

@@ -15,7 +15,7 @@ import javax.swing.JPanel;
  *
  */
 public class EastPanel extends JPanel {
-	private static EastPanel eastPanel = new EastPanel();
+	private static EastPanel eastPanel;
 	private javax.swing.JLabel eastBid;
 	private javax.swing.JLabel eastCardImg;
 	private javax.swing.JLabel eastCardsNum;
@@ -29,7 +29,10 @@ public class EastPanel extends JPanel {
 	}
 
 	public static EastPanel getInstance() {
-		eastPanel.initComp();
+		if (null == eastPanel) {
+			 eastPanel = new EastPanel();
+			 eastPanel.initComp();
+		}
 		return eastPanel;
 	}
 

@@ -22,7 +22,6 @@ public class TableFrame extends JFrame {
 
 	private TableFrame(Color myTeamColor, Color oppentColor) {
 		initComponents();
-//		 initPanelData();
 	}
 
 	private void initPanelData() {
@@ -83,5 +82,10 @@ public class TableFrame extends JFrame {
 
 	public static void main(String[] args) {
 		TableFrame.getInstance();
+	}
+	
+	public static void updateCenterTable(String cardName,int position){
+		CenterPanel.getInstance().changeCardPlayed(cardName, "" + position);
+		tableFrame.revalidate();
 	}
 }

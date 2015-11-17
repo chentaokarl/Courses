@@ -17,7 +17,7 @@ import javax.swing.JPanel;
  *
  */
 public class SouthPanel extends JPanel {
-	private static SouthPanel southPanel = new SouthPanel();
+	private static SouthPanel southPanel;
 	private javax.swing.JLabel southCardsNum;
 	private javax.swing.JPanel southCardsPanel;
 	private javax.swing.JButton southPlayBtn;
@@ -35,7 +35,10 @@ public class SouthPanel extends JPanel {
 	}
 
 	public static SouthPanel getInstance() {
-		southPanel.initComp();
+		if (null == southPanel) {
+			southPanel = new SouthPanel();
+			southPanel.initComp();
+		}
 		return southPanel;
 	}
 
@@ -47,15 +50,15 @@ public class SouthPanel extends JPanel {
 		if (Util.isMyTurnFlag()) {
 
 			JLabel source = (JLabel) evt.getSource();
-			CenterPanel.getInstance().changeCardPlayed(source.getName());
+			TableFrame.updateCenterTable(source.getName(), -1);
 			cardsDisplayPanel.remove(source);
 			source = null;
 			cardsDisplayPanel.repaint();
 			cardsDisplayPanel.validate();
 			southCardsPanel.validate();
 			southPanel.validate();
-		}else{
-			
+		} else {
+
 		}
 	}
 
@@ -77,9 +80,9 @@ public class SouthPanel extends JPanel {
 		southCardsPanel.validate();
 		southPanel.validate();
 	}
-	
-	public void reset(){
-		
+
+	public void reset() {
+
 	}
 
 	private void initComp() {
@@ -127,7 +130,7 @@ public class SouthPanel extends JPanel {
 		southTotalPoints.setText("Total Points: ");
 
 		southPlayBtn.setText("Play");
-//		southPlayBtn.setVisible(false);
+		// southPlayBtn.setVisible(false);
 		southPlayBtn.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				southPlayBtnActionPerformed(evt);
@@ -142,65 +145,62 @@ public class SouthPanel extends JPanel {
 		southDisplayArea.setEditable(false);
 		southJScrollPane1.setViewportView(southDisplayArea);
 
-
-		 javax.swing.GroupLayout southPanelLayout = new javax.swing.GroupLayout(southPanel);
-	        southPanel.setLayout(southPanelLayout);
-	        southPanelLayout.setHorizontalGroup(
-	            southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-	            .addGroup(southPanelLayout.createSequentialGroup()
-	                .addGroup(southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-	                    .addGroup(southPanelLayout.createSequentialGroup()
-	                        .addGap(239, 239, 239)
-	                        .addComponent(southPlayerImg))
-	                    .addGroup(southPanelLayout.createSequentialGroup()
-	                        .addGap(282, 282, 282)
-	                        .addComponent(southPlayerName))
-	                    .addGroup(southPanelLayout.createSequentialGroup()
-	                        .addGap(223, 223, 223)
-	                        .addComponent(southTotalPoints)))
-	                .addGroup(southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-	                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, southPanelLayout.createSequentialGroup()
-	                        .addGap(154, 154, 154)
-	                        .addComponent(southBid)
-	                        .addGap(212, 212, 212)
-	                        .addComponent(southCardsNum)
-	                        .addGap(209, 209, 209)
-	                        .addComponent(southPoints)
-	                        .addGap(252, 252, 252)
-	                        .addComponent(southPlayBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-	                        .addContainerGap())
-	                    .addGroup(southPanelLayout.createSequentialGroup()
-	                        .addGap(92, 92, 92)
-	                        .addComponent(southCardsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-	                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-	                        .addComponent(southJScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE))))
-	        );
-	        southPanelLayout.setVerticalGroup(
-	            southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-	            .addGroup(southPanelLayout.createSequentialGroup()
-	                .addGroup(southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-	                    .addGroup(southPanelLayout.createSequentialGroup()
-	                        .addContainerGap()
-	                        .addComponent(southPlayerImg))
-	                    .addGroup(southPanelLayout.createSequentialGroup()
-	                        .addGap(16, 16, 16)
-	                        .addGroup(southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-	                            .addComponent(southJScrollPane1)
-	                            .addComponent(southCardsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-	                .addGap(18, 18, 18)
-	                .addGroup(southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-	                    .addGroup(southPanelLayout.createSequentialGroup()
-	                        .addGroup(southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-	                            .addComponent(southPlayerName)
-	                            .addComponent(southBid))
-	                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-	                        .addComponent(southTotalPoints))
-	                    .addComponent(southPlayBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-	                    .addGroup(southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-	                        .addComponent(southPoints)
-	                        .addComponent(southCardsNum)))
-	                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-	        );
+		javax.swing.GroupLayout southPanelLayout = new javax.swing.GroupLayout(southPanel);
+		southPanel.setLayout(southPanelLayout);
+		southPanelLayout.setHorizontalGroup(southPanelLayout
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(southPanelLayout.createSequentialGroup()
+						.addGroup(southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(southPanelLayout.createSequentialGroup().addGap(239, 239, 239)
+										.addComponent(southPlayerImg))
+								.addGroup(southPanelLayout.createSequentialGroup().addGap(282, 282, 282)
+										.addComponent(southPlayerName))
+								.addGroup(southPanelLayout.createSequentialGroup().addGap(223, 223, 223)
+										.addComponent(southTotalPoints)))
+						.addGroup(southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+								.addGroup(javax.swing.GroupLayout.Alignment.LEADING,
+										southPanelLayout.createSequentialGroup().addGap(154, 154, 154)
+												.addComponent(southBid).addGap(212, 212, 212)
+												.addComponent(southCardsNum).addGap(209, 209, 209)
+												.addComponent(southPoints).addGap(252, 252, 252)
+												.addComponent(southPlayBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 166,
+														javax.swing.GroupLayout.PREFERRED_SIZE)
+												.addContainerGap())
+								.addGroup(southPanelLayout.createSequentialGroup().addGap(92, 92, 92)
+										.addComponent(southCardsPanel, javax.swing.GroupLayout.DEFAULT_SIZE,
+												javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addComponent(southJScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 314,
+												javax.swing.GroupLayout.PREFERRED_SIZE)))));
+		southPanelLayout.setVerticalGroup(southPanelLayout
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(southPanelLayout.createSequentialGroup()
+						.addGroup(southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+								.addGroup(southPanelLayout.createSequentialGroup().addContainerGap()
+										.addComponent(southPlayerImg))
+								.addGroup(southPanelLayout.createSequentialGroup().addGap(16, 16, 16)
+										.addGroup(southPanelLayout
+												.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+												.addComponent(southJScrollPane1).addComponent(southCardsPanel,
+														javax.swing.GroupLayout.PREFERRED_SIZE,
+														javax.swing.GroupLayout.DEFAULT_SIZE,
+														javax.swing.GroupLayout.PREFERRED_SIZE))))
+						.addGap(18, 18, 18)
+						.addGroup(southPanelLayout
+								.createParallelGroup(
+										javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(southPanelLayout.createSequentialGroup()
+										.addGroup(southPanelLayout
+												.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(southPlayerName).addComponent(southBid))
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addComponent(southTotalPoints))
+								.addComponent(southPlayBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 59,
+										javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addGroup(
+										southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+												.addComponent(southPoints).addComponent(southCardsNum)))
+						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 	}
 
 }
