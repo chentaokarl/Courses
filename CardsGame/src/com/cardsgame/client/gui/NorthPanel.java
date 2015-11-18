@@ -26,8 +26,8 @@ public class NorthPanel extends JPanel {
 	private javax.swing.JLabel northPoints;
 	private javax.swing.JLabel northBid;
 	private JLabel northTotalPoints;
-	private JScrollPane southJScrollPane1;
-	private JTextArea southDisplayArea;
+	private JScrollPane northJScrollPane1;
+	private JTextArea northDisplayArea;
 
 	private NorthPanel() {
 		super();
@@ -51,9 +51,9 @@ public class NorthPanel extends JPanel {
 		northPlayerImage = Util.getPlayerLabel("", null);
 		northCardImg = Util.getaCardBackLabel("", null);
 		
-		southJScrollPane1 = new javax.swing.JScrollPane();
-		southDisplayArea = new javax.swing.JTextArea();
-
+		northJScrollPane1 = new javax.swing.JScrollPane();
+		northDisplayArea = new javax.swing.JTextArea();
+		
 		northCardsNum.setFont(new Font("Tahoma", 0, 30));
 		northPoints.setFont(new Font("Tahoma", 0, 30));
 		northPlayerName.setFont(new Font("Tahoma", 0, 30));
@@ -66,35 +66,33 @@ public class NorthPanel extends JPanel {
 		northBid.setText("Bid: ");
 		northTotalPoints.setText("Total Points:");
 		
-		southDisplayArea.setColumns(20);
-		southDisplayArea.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
-		southDisplayArea.setRows(5);
-		southDisplayArea.setLineWrap(true);
-		southDisplayArea.setText(Util.DEFAULT_HINT);
-		southDisplayArea.setEditable(false);
-		southJScrollPane1.setViewportView(southDisplayArea);
+//		southDisplayArea.setEditable(false);
 
-		javax.swing.GroupLayout northPanelLayout = new javax.swing.GroupLayout(northPanel);
+        northDisplayArea.setColumns(20);
+        northDisplayArea.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
+        northDisplayArea.setLineWrap(true);
+        northDisplayArea.setRows(5);
+        northDisplayArea.setText("Hint:\nWhen it's your turn,  double click to play out one of your cards. ");
+        northJScrollPane1.setViewportView(northDisplayArea);
+
+        javax.swing.GroupLayout northPanelLayout = new javax.swing.GroupLayout(northPanel);
         northPanel.setLayout(northPanelLayout);
         northPanelLayout.setHorizontalGroup(
             northPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, northPanelLayout.createSequentialGroup()
-                .addGap(86, 86, 86)
-                .addComponent(southJScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 425, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8)
+                .addComponent(northJScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 418, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(128, 128, 128)
                 .addGroup(northPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(northPanelLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(northPlayerImage, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(northPlayerImage, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(northPanelLayout.createSequentialGroup()
                         .addGroup(northPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(northPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(northPoints)
+                                .addComponent(northCardsNum)
+                                .addComponent(northBid))
                             .addGroup(northPanelLayout.createSequentialGroup()
-                                .addGap(43, 43, 43)
-                                .addGroup(northPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(northPoints)
-                                    .addComponent(northCardsNum)
-                                    .addComponent(northBid)))
-                            .addGroup(northPanelLayout.createSequentialGroup()
-                                .addGap(111, 111, 111)
+                                .addGap(68, 68, 68)
                                 .addComponent(northCardImg)))
                         .addGroup(northPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(northPanelLayout.createSequentialGroup()
@@ -109,7 +107,7 @@ public class NorthPanel extends JPanel {
             northPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(northPanelLayout.createSequentialGroup()
                 .addGroup(northPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(southJScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(northJScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(northPanelLayout.createSequentialGroup()
                         .addGap(4, 4, 4)
                         .addGroup(northPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)

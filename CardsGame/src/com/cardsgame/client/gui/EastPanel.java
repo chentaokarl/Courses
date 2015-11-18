@@ -51,64 +51,72 @@ public class EastPanel extends JPanel {
 		eastBid.setFont(new Font("Tahoma", 0, 30));
 		eastTotalPoints.setFont(new Font("Tahoma", 0, 30));
 
-		eastPlayerName.setText("east");
-		eastCardsNum.setText("Cards Left: ");
-		eastPoints.setText("Points:");
-		eastBid.setText("Bid: ");
-		eastTotalPoints.setText("Total Points: ");
+//		  eastPlayerImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("images/player.jpg"))); // NOI18N
 
-		javax.swing.GroupLayout eastPanelLayout = new javax.swing.GroupLayout(eastPanel);
-        eastPanel.setLayout(eastPanelLayout);
-        eastPanelLayout.setHorizontalGroup(
-            eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(eastPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(eastPanelLayout.createSequentialGroup()
-                        .addGroup(eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(eastPoints)
-                            .addComponent(eastBid))
-                        .addGap(96, 96, 96)
-                        .addComponent(eastTotalPoints)
-                        .addContainerGap(36, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, eastPanelLayout.createSequentialGroup()
-                        .addGroup(eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(eastPanelLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(eastCardImg))
-                            .addGroup(eastPanelLayout.createSequentialGroup()
-                                .addComponent(eastCardsNum)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGroup(eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(eastPanelLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(eastPlayerImg, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(eastPanelLayout.createSequentialGroup()
-                                .addGap(81, 81, 81)
-                                .addComponent(eastPlayerName)))
-                        .addGap(21, 21, 21))))
-        );
-        eastPanelLayout.setVerticalGroup(
-            eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(eastPanelLayout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addGroup(eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(eastPanelLayout.createSequentialGroup()
-                        .addComponent(eastCardImg)
-                        .addGap(21, 21, 21)
-                        .addComponent(eastCardsNum)
-                        .addGap(4, 4, 4)
-                        .addComponent(eastPoints)
-                        .addGap(3, 3, 3)
-                        .addComponent(eastBid))
-                    .addGroup(eastPanelLayout.createSequentialGroup()
-                        .addComponent(eastPlayerName)
-                        .addGap(4, 4, 4)
-                        .addComponent(eastPlayerImg, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(eastTotalPoints)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+	        eastPlayerName.setText("east");
+
+//	        eastCardImg.setIcon(new javax.swing.ImageIcon(getClass().getResource("images/card_back.jpg"))); // NOI18N
+
+	        eastCardsNum.setText("Cards Left: ");
+
+	        eastPoints.setText("Points:");
+
+	        eastBid.setText("Bid: ");
+
+	        eastTotalPoints.setText("Total Points: ");
+
+	        javax.swing.GroupLayout eastPanelLayout = new javax.swing.GroupLayout(eastPanel);
+	        eastPanel.setLayout(eastPanelLayout);
+	        eastPanelLayout.setHorizontalGroup(
+	            eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+	            .addGroup(eastPanelLayout.createSequentialGroup()
+	                .addContainerGap()
+	                .addGroup(eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+	                    .addGroup(eastPanelLayout.createSequentialGroup()
+	                        .addGroup(eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+	                            .addComponent(eastPoints)
+	                            .addComponent(eastBid))
+	                        .addGap(96, 96, 96)
+	                        .addComponent(eastTotalPoints)
+	                        .addContainerGap(36, Short.MAX_VALUE))
+	                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, eastPanelLayout.createSequentialGroup()
+	                        .addGroup(eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+	                            .addGroup(eastPanelLayout.createSequentialGroup()
+	                                .addGap(0, 0, Short.MAX_VALUE)
+	                                .addComponent(eastCardImg))
+	                            .addGroup(eastPanelLayout.createSequentialGroup()
+	                                .addComponent(eastCardsNum)
+	                                .addGap(0, 0, Short.MAX_VALUE)))
+	                        .addGroup(eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+	                            .addGroup(eastPanelLayout.createSequentialGroup()
+	                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+	                                .addComponent(eastPlayerImg, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
+	                            .addGroup(eastPanelLayout.createSequentialGroup()
+	                                .addGap(81, 81, 81)
+	                                .addComponent(eastPlayerName)))
+	                        .addGap(21, 21, 21))))
+	        );
+	        eastPanelLayout.setVerticalGroup(
+	            eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+	            .addGroup(eastPanelLayout.createSequentialGroup()
+	                .addGap(12, 12, 12)
+	                .addGroup(eastPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+	                    .addGroup(eastPanelLayout.createSequentialGroup()
+	                        .addComponent(eastCardImg)
+	                        .addGap(21, 21, 21)
+	                        .addComponent(eastCardsNum)
+	                        .addGap(4, 4, 4)
+	                        .addComponent(eastPoints)
+	                        .addGap(3, 3, 3)
+	                        .addComponent(eastBid))
+	                    .addGroup(eastPanelLayout.createSequentialGroup()
+	                        .addComponent(eastPlayerName)
+	                        .addGap(4, 4, 4)
+	                        .addComponent(eastPlayerImg, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
+	                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+	                        .addComponent(eastTotalPoints)))
+	                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+	        );
 
 	}
 }

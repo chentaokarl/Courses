@@ -15,16 +15,12 @@ import javax.swing.JPanel;
 public class CenterPanel extends JPanel {
 
 	private static CenterPanel centerPanel;
-	private javax.swing.JTextArea centerDisplayArea;
+	private javax.swing.JTextArea centerPanelDisplay;
 	private javax.swing.JLabel centerECardPlayed;
 	private javax.swing.JLabel centerNCardPlayed;
 	private javax.swing.JLabel centerSCardPlayed;
 	private javax.swing.JLabel centerWCardPlayed;
 	private javax.swing.JScrollPane jScrollPane1;
-//	private javax.swing.JPanel centerECardPanel;
-//	private javax.swing.JPanel centerNCardPanel;
-//	private javax.swing.JPanel centerSCardPanel;
-//	private javax.swing.JPanel centerWCardPanel;
 	private int i = 1;
 	private int myPosition = 0;
 
@@ -52,7 +48,7 @@ public class CenterPanel extends JPanel {
 			centerNCardPlayed.setIcon(Util.getImage(imgName));
 		}
 		
-		centerDisplayArea.setText(imgName);
+		centerPanelDisplay.setText(imgName);
 		revalidate();
 		repaint();
 	}
@@ -83,60 +79,28 @@ public class CenterPanel extends JPanel {
 	}
 
 	private void initComp() {
-		centerWCardPlayed = new javax.swing.JLabel();
-		centerNCardPlayed = new javax.swing.JLabel();
-		centerECardPlayed = new javax.swing.JLabel();
 		centerSCardPlayed = new javax.swing.JLabel();
-		jScrollPane1 = new javax.swing.JScrollPane();
-//		centerWCardPanel = new javax.swing.JPanel();
-//		centerECardPanel = new javax.swing.JPanel();
-//		centerNCardPanel = new javax.swing.JPanel();
-//		centerSCardPanel = new javax.swing.JPanel();
+        centerECardPlayed = new javax.swing.JLabel();
+        centerNCardPlayed = new javax.swing.JLabel();
+        centerWCardPlayed = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        centerPanelDisplay = new javax.swing.JTextArea();
+        
+		centerSCardPlayed.setIcon(Util.getImage("blank")); // NOI18N
 
-		centerDisplayArea = new javax.swing.JTextArea();
+        centerECardPlayed.setIcon(Util.getImage("blank")); // NOI18N
 
-		centerWCardPlayed.setIcon(Util.getImage("blank"));
-		centerNCardPlayed.setIcon(Util.getImage("blank"));
-		centerECardPlayed.setIcon(Util.getImage("blank"));
-		centerSCardPlayed.setIcon(Util.getImage("blank"));
+        centerNCardPlayed.setIcon(Util.getImage("blank")); // NOI18N
 
-//		centerWCardPanel.setBackground(Color.white);
-//		centerECardPanel.setBackground(Color.white);
-//		centerNCardPanel.setBackground(Color.white);
-//		centerSCardPanel.setBackground(Color.white);
+        centerWCardPlayed.setIcon(Util.getImage("blank")); // NOI18N
 
-//		centerWCardPlayed.addMouseListener(new java.awt.event.MouseAdapter() {
-//			public void mouseClicked(java.awt.event.MouseEvent evt) {
-//				if (evt.getClickCount() == 2) {
-//					cardMouseClicked(evt);
-//				}
-//			}
-//
-//		});
+        centerPanelDisplay.setColumns(20);
+        centerPanelDisplay.setLineWrap(true);
+        centerPanelDisplay.setRows(5);
+        centerPanelDisplay.setEditable(false);
+        jScrollPane1.setViewportView(centerPanelDisplay);
 
-		centerDisplayArea.setColumns(20);
-//		centerDisplayArea.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
-		centerDisplayArea.setLineWrap(true);
-		centerDisplayArea.setRows(5);
-		centerDisplayArea.setEditable(false);
-		jScrollPane1.setViewportView(centerDisplayArea);
-
-//		centerWCardPanel.setLayout(new javax.swing.BoxLayout(centerWCardPanel, javax.swing.BoxLayout.LINE_AXIS));
-//
-//		centerWCardPanel.add(centerWCardPlayed);
-//
-//		centerECardPanel.setLayout(new javax.swing.BoxLayout(centerECardPanel, javax.swing.BoxLayout.LINE_AXIS));
-//
-//		centerECardPanel.add(centerECardPlayed);
-
-//		centerNCardPanel.setLayout(new javax.swing.BoxLayout(centerNCardPanel, javax.swing.BoxLayout.LINE_AXIS));
-//
-//		centerNCardPanel.add(centerNCardPlayed);
-
-//		centerSCardPanel.setLayout(new javax.swing.BoxLayout(centerSCardPanel, javax.swing.BoxLayout.LINE_AXIS));
-//
-//		centerSCardPanel.add(centerSCardPlayed);
-		javax.swing.GroupLayout centerPanelLayout = new javax.swing.GroupLayout(centerPanel);
+        javax.swing.GroupLayout centerPanelLayout = new javax.swing.GroupLayout(centerPanel);
         centerPanel.setLayout(centerPanelLayout);
         centerPanelLayout.setHorizontalGroup(
             centerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
