@@ -71,6 +71,7 @@ public class NorthPanel extends JPanel {
         northDisplayArea.setColumns(20);
         northDisplayArea.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         northDisplayArea.setLineWrap(true);
+        northDisplayArea.setEditable(false);
         northDisplayArea.setRows(5);
         northDisplayArea.setText("Hint:\nWhen it's your turn,  double click to play out one of your cards. ");
         northJScrollPane1.setViewportView(northDisplayArea);

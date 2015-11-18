@@ -111,25 +111,6 @@ public class SouthPanel extends JPanel {
 		cardsDisplayPanel.setLayout(new javax.swing.BoxLayout(cardsDisplayPanel, javax.swing.BoxLayout.LINE_AXIS));
 
 
-		// card1.setIcon(new
-		// javax.swing.ImageIcon(getClass().getResource("/com/GUI/d4.jpg"))); //
-		// NOI18N
-		// card1.addMouseListener(new java.awt.event.MouseAdapter() {
-		// public void mouseClicked(java.awt.event.MouseEvent evt) {
-		// cardMouseClicked(evt);
-		// }
-		// });
-		// cardsDisplayPanel.add(card1);
-
-
-        JLabel card1 = new JLabel();
-        card1.setIcon(new javax.swing.ImageIcon(getClass().getResource("images/d4.jpg"))); // NOI18N
-        card1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cardMouseClicked(evt);
-            }
-        });
-        cardsDisplayPanel.add(card1);
 
         javax.swing.GroupLayout southCardsPanelLayout = new javax.swing.GroupLayout(southCardsPanel);
         southCardsPanel.setLayout(southCardsPanelLayout);
@@ -152,6 +133,7 @@ public class SouthPanel extends JPanel {
 
         southInfoField.setText("Cards Left : Points: TotalPoints: Bid: ");
         southInfoField.setFont(new Font("Tahoma", 0, 30));
+        southInfoField.setEditable(false);
 //        southInfoField.addActionListener(new java.awt.event.ActionListener() {
 //            public void actionPerformed(java.awt.event.ActionEvent evt) {
 //                southInfoFieldActionPerformed(evt);
