@@ -48,7 +48,7 @@ public class SouthPanel extends JPanel {
 		if (Util.isMyTurnFlag()) {
 
 			JLabel source = (JLabel) evt.getSource();
-			// TableFrame.updateCenterTable(source.getName(), -1);
+			 TableFrame.updateCenterTable(source.getName(), -1);
 			cardsDisplayPanel.remove(source);
 			source = null;
 			cardsDisplayPanel.repaint();
