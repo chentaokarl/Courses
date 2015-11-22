@@ -6,6 +6,7 @@ package com.cardsgame.client.gui;
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 
+import javax.print.DocFlavor.STRING;
 import javax.swing.JPanel;
 
 /**
@@ -36,47 +37,85 @@ public class CenterPanel extends JPanel {
 		}
 		return centerPanel;
 	}
-
-	public void changeCardPlayed(String imgName, String position) {
-		if (position.equals(""+myPosition) || position.equals("-1")) {
-			centerSCardPlayed.setIcon(Util.getImage(imgName));
-		}else if (position.equals(centerWCardPlayed.getName())) {
-			centerWCardPlayed.setIcon(Util.getImage(imgName));
-		}else if (position.equals(centerECardPlayed.getName())) {
-			centerECardPlayed.setIcon(Util.getImage(imgName));
-		}else if (position.equals(centerNCardPlayed.getName())) {
-			centerNCardPlayed.setIcon(Util.getImage(imgName));
-		}
-		
-		centerPanelDisplay.setText(imgName);
+	
+	public void updateSouthCardPlayed(String imgName){
+		centerSCardPlayed.setIcon(Util.getImage(imgName));
+		revalidate();
+		repaint();
+	}
+	
+	public void updateWestCardPlayed(String imgName){
+		centerWCardPlayed.setIcon(Util.getImage(imgName));
+		revalidate();
+		repaint();
+	}
+	public void updateEastCardPlayed(String imgName){
+		centerECardPlayed.setIcon(Util.getImage(imgName));
+		revalidate();
+		repaint();
+	}
+	public void updateNorthCardPlayed(String imgName){
+		centerNCardPlayed.setIcon(Util.getImage(imgName));
 		revalidate();
 		repaint();
 	}
 
+	public void updateCenterInfo(String text){
+		centerPanelDisplay.setText(text);
+		revalidate();
+		repaint();
+	}
+	
+	public void clearCenter(int position){
+		if (Util.isGameOverFlag()) {
+			centerSCardPlayed.setIcon(Util.getImage("blank")); 
+	        centerECardPlayed.setIcon(Util.getImage("blank")); 
+	        centerNCardPlayed.setIcon(Util.getImage("blank")); 
+	        centerWCardPlayed.setIcon(Util.getImage("blank")); 
+		}
+		
+		
+	}
+//	public void changeCardPlayed(String imgName) {
+//		if (position.equals(""+myPosition) || position.equals("-1")) {
+//			centerSCardPlayed.setIcon(Util.getImage(imgName));
+//		}else if (position.equals(centerWCardPlayed.getName())) {
+//			centerWCardPlayed.setIcon(Util.getImage(imgName));
+//		}else if (position.equals(centerECardPlayed.getName())) {
+//			centerECardPlayed.setIcon(Util.getImage(imgName));
+//		}else if (position.equals(centerNCardPlayed.getName())) {
+//			centerNCardPlayed.setIcon(Util.getImage(imgName));
+//		}
+//		
+//		centerPanelDisplay.setText(imgName);
+//		revalidate();
+//		repaint();
+//	}
+
 //	private void cardMouseClicked(MouseEvent evt) {
 //	}
-//	
-	public void InitCardLabelNum(int myPosition){
-		this.myPosition = myPosition;
-		centerSCardPlayed.setName("" + myPosition);
-		int position = myPosition + 1;
-		if (position > 4) {
-			position = 1;
-		}
-		centerECardPlayed.setName("" + position);
-		
-		position ++;
-		if (position > 4) {
-			position = 1;
-		}
-		centerNCardPlayed.setName("" + position);
-		
-		position ++;
-		if (position > 4) {
-			position = 1;
-		}
-		centerWCardPlayed.setName("" + position);
-	}
+////	
+//	public void InitCardLabelNum(int myPosition){
+//		this.myPosition = myPosition;
+//		centerSCardPlayed.setName("" + myPosition);
+//		int position = myPosition + 1;
+//		if (position > 4) {
+//			position = 1;
+//		}
+//		centerECardPlayed.setName("" + position);
+//		
+//		position ++;
+//		if (position > 4) {
+//			position = 1;
+//		}
+//		centerNCardPlayed.setName("" + position);
+//		
+//		position ++;
+//		if (position > 4) {
+//			position = 1;
+//		}
+//		centerWCardPlayed.setName("" + position);
+//	}
 
 	private void initComp() {
 		centerSCardPlayed = new javax.swing.JLabel();

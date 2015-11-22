@@ -12,6 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import com.cardsgame.util.PositionData;
+
 /**
  * @author Tao
  *
@@ -28,6 +30,7 @@ public class NorthPanel extends JPanel {
 	private JLabel northTotalPoints;
 	private JScrollPane northJScrollPane1;
 	private JTextArea northDisplayArea;
+	private int positionNum = Integer.MIN_VALUE;
 
 	private NorthPanel() {
 		super();
@@ -128,6 +131,52 @@ public class NorthPanel extends JPanel {
                         .addComponent(northBid)))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
+	}
+
+	/**
+	 * @return the positionNum
+	 */
+	public int getPositionNum() {
+		return positionNum;
+	}
+
+	/**
+	 * @param positionNum the positionNum to set
+	 */
+	public void setPositionNum(int positionNum) {
+		this.positionNum = positionNum;
+	}
+	
+	public void initData(PositionData positionData) {
+		setPositionNum(positionData.getPositionNum());
+		northPlayerName.setText(positionData.getUserName());
+		northPlayerName.validate();
+		northPanel.validate();
+	}
+
+	public void updateData(PositionData positionData) {
+		String newText = null;
+		if (Integer.MIN_VALUE != positionData.getTotalPoints()) {
+			northTotalPoints.setText("" + positionData.getTotalPoints());
+		} 
+		if (Integer.MIN_VALUE != positionData.getCardsLeft()) {
+			northCardsNum.setText("" + positionData.getCardsLeft());
+		} 
+		if (Integer.MIN_VALUE != positionData.getCurrentRoundPoints()) {
+			northPoints.setText("" + positionData.getCurrentRoundPoints());
+		} 
+		if (Integer.MIN_VALUE != positionData.getBid()) {
+			northBid.setText("" + positionData.getBid());
+		}
+		
+		if (null != positionData.getCardPlayed()) {
+			CenterPanel.getInstance().updateNorthCardPlayed(positionData.getCardPlayed());
+		}
+		northTotalPoints.validate();
+		northCardsNum.validate();
+		northPoints.validate();
+		northBid.validate();
+		northPanel.validate();
 	}
 
 }

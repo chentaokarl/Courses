@@ -5,22 +5,27 @@ import javax.swing.JLabel;
 
 public class Util {
 	public final static String DEFAULT_PLAYER_IMAGE = "images/player.jpg";
+	public final static String DEFAULT_NULL_PLAYER_IMAGE = "images/null_player.jpg";
+	
 	public final static String DEFAULT_CARD_BACK_IMAGE = "images/card_back.jpg";
 	public final static String DEFAULT_CARD_IMG_PREFIX = "images/";
 	public final static String DEFAULT_CARD_IMG_SURFIX = ".jpg";
 	public final static String DEFAULT_HINT = "Hint:\nWhen it's your turn,\ndouble click to play \nout one of your cards. ";
-	private final static ImageIcon playerImage =  new ImageIcon(Util.class.getResource(DEFAULT_PLAYER_IMAGE));
+	public final static ImageIcon playerImage =  new ImageIcon(Util.class.getResource(DEFAULT_PLAYER_IMAGE));
+	public final static ImageIcon nullPlayerImage =  new ImageIcon(Util.class.getResource(DEFAULT_NULL_PLAYER_IMAGE));
 	private final static ImageIcon cardbackImage =  new ImageIcon(Util.class.getResource(DEFAULT_CARD_BACK_IMAGE));
 	private static boolean isMyTurnFlag = true; //to indicate my turn or not. Only In my turn, I can play out card.
 	private static boolean gameStartFlag = false;// to indicate game starts or not.
+	private static boolean gameOverFlag = false;
 	
 	public static JLabel getPlayerLabel(String labelName, ImageIcon newImage) {
 		if (null == newImage) {
-			return new JLabel(labelName, playerImage, JLabel.CENTER);
+			return new JLabel(labelName, nullPlayerImage, JLabel.CENTER);
 		}else{
 			return new JLabel(labelName, newImage, JLabel.CENTER);
 		}
 	}
+	
 	
 	public static JLabel getaCardBackLabel(String labelName, ImageIcon newBImage) {
 		if (null == newBImage) {
@@ -61,5 +66,20 @@ public class Util {
 	public static void setGameStartFlag(boolean gameStartFlag) {
 		Util.gameStartFlag = gameStartFlag;
 	}
+
+	/**
+	 * @return the gameOverFlag
+	 */
+	public static boolean isGameOverFlag() {
+		return gameOverFlag;
+	}
+
+	/**
+	 * @param gameOverFlag the gameOverFlag to set
+	 */
+	public static void setGameOverFlag(boolean gameOverFlag) {
+		Util.gameOverFlag = gameOverFlag;
+	}
+	
 	
 }

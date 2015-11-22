@@ -6,6 +6,7 @@ package com.cardsgame.util;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 import java.security.PublicKey;
 
@@ -14,7 +15,7 @@ import javax.crypto.SealedObject;
 import com.cardsgame.util.keys.KeysManager;
 
 /**
- * @author weiqicui
+ * @author tao
  *
  */
 public class MessageHandler implements MessageHandlerInterface {
@@ -25,12 +26,18 @@ public class MessageHandler implements MessageHandlerInterface {
 	 * @see com.cardsgame.server.MessageHandlerInterface#send(java.lang.Object)
 	 */
 	@Override
-	public void sendMsg(Socket socket, Message message) throws Exception {
-		PublicKey publicKey = KeysManager.getInstance().getUserPublicKey(message.getUserName());
+	public void sendMsg(Socket socket, Serializable message) throws Exception {
+		PublicKey publicKey = null;
+		if (message instanceof PositionData) {
+			publicKey = KeysManager.getInstance().getUserPublicKey(((PositionData) message).getUserName());
+		} else if (message instanceof Message) {
+
+			publicKey = KeysManager.getInstance().getUserPublicKey(((Message) message).getUserName());
+		}
+
 		ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
 		if (null != publicKey) {
-			SealedObject sealedObject = Encryption.getInstance().encryptMessage(message,
-					KeysManager.getInstance().getUserPublicKey(message.getUserName()));
+			SealedObject sealedObject = Encryption.getInstance().encryptMessage(message, publicKey);
 			oos.writeObject(sealedObject);
 		} else {
 			oos.writeObject(message);
@@ -44,15 +51,15 @@ public class MessageHandler implements MessageHandlerInterface {
 	 * @see com.cardsgame.server.MessageHandlerInterface#read(java.lang.Object)
 	 */
 	@Override
-	public Message readMsg(Socket socket) throws Exception {
+	public Object readMsg(Socket socket) throws Exception {
 		// TODO Auto-generated method stub
 		ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
 		Object obj = ois.readObject();
 		if (obj instanceof SealedObject) {
 			return Encryption.getInstance().decryptMessage((SealedObject) (ois.readObject()));
 		}
-		
-		return (Message) obj;
+
+		return obj;
 	}
 
 	public String readString(Socket socket) throws Exception {

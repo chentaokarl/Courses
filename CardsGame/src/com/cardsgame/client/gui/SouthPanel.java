@@ -12,6 +12,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.xml.transform.Source;
+
+import com.cardsgame.util.Message;
+import com.cardsgame.util.PositionData;
 
 /**
  * @author Tao
@@ -31,6 +35,7 @@ public class SouthPanel extends JPanel {
 	private JPanel cardsDisplayPanel = new JPanel();
 	private JLabel southTotalPoints;
 	private JTextField southInfoField;
+	private int positionNum = Integer.MIN_VALUE;
 
 	private SouthPanel() {
 		super();
@@ -46,9 +51,13 @@ public class SouthPanel extends JPanel {
 
 	private void cardMouseClicked(MouseEvent evt) {
 		if (Util.isMyTurnFlag()) {
-
 			JLabel source = (JLabel) evt.getSource();
-			 TableFrame.updateCenterTable(source.getName(), -1);
+			PositionData positionData = new PositionData();
+			positionData.setPositionNum(positionNum);
+			positionData.setCardPlayed(source.getName());
+			Client.getInstance().new SendThread(positionData).start();// send played card
+			
+			CenterPanel.getInstance().updateSouthCardPlayed(source.getName());
 			cardsDisplayPanel.remove(source);
 			source = null;
 			cardsDisplayPanel.repaint();
@@ -56,7 +65,7 @@ public class SouthPanel extends JPanel {
 			southCardsPanel.validate();
 			southPanel.validate();
 		} else {
-
+			//warning to be done.
 		}
 	}
 
@@ -84,7 +93,7 @@ public class SouthPanel extends JPanel {
 	}
 
 	private void initComp() {
-		southPlayerImg = Util.getPlayerLabel("", null);
+		southPlayerImg = Util.getPlayerLabel("", Util.playerImage);
 		southPlayerName = new javax.swing.JLabel();
 		southCardsPanel = new javax.swing.JPanel();
 		southCardsNum = new javax.swing.JLabel();
@@ -131,7 +140,7 @@ public class SouthPanel extends JPanel {
 
         southPlayerName.setText("south");
 
-        southInfoField.setText("Cards Left : Points: TotalPoints: Bid: ");
+        southInfoField.setText("TotalPoints:	Cards Left:		Points:		Bid:	");
         southInfoField.setFont(new Font("Tahoma", 0, 30));
         southInfoField.setEditable(false);
 //        southInfoField.addActionListener(new java.awt.event.ActionListener() {
@@ -174,6 +183,73 @@ public class SouthPanel extends JPanel {
 	protected void initLabelMouseClicked(MouseEvent evt) {
 		// TODO Auto-generated method stub
 
+	}
+
+	/**
+	 * @return the positionNum
+	 */
+	public int getPositionNum() {
+		return positionNum;
+	}
+
+	/**
+	 * @param positionNum the positionNum to set
+	 */
+	public void setPositionNum(int positionNum) {
+		this.positionNum = positionNum;
+	}
+
+	public void initData(PositionData positionData) {
+		setPositionNum(positionData.getPositionNum());
+		southPlayerName.setText(positionData.getUserName());
+		southPlayerName.validate();
+		southCardsPanel.validate();
+		southPanel.validate();
+	}
+	
+	//TotalPoints:Cards Left:		Points:		Bid:	
+	public void updateData(PositionData positionData){
+		String newText = null;
+		if (Integer.MIN_VALUE != positionData.getTotalPoints()) {
+			 newText = getDisplayString(southInfoField.getText().indexOf(":"), southInfoField.getText().indexOf("Cards Left:"), positionData.getTotalPoints());
+		}
+		if (Integer.MIN_VALUE != positionData.getCardsLeft()) {
+			if (null != newText) {
+				newText = getDisplayString(newText.indexOf("Cards Left:") + 10, newText.indexOf("Points:"), positionData.getCardsLeft());
+			}else{
+				newText = getDisplayString(southInfoField.getText().indexOf("Cards Left:") + 10, southInfoField.getText().indexOf("Points:"), positionData.getCardsLeft());
+			}
+		}
+		if (Integer.MIN_VALUE != positionData.getCurrentRoundPoints()) {
+			if (null != newText) {
+				newText = getDisplayString(newText.indexOf("Points:") + 6, newText.indexOf("Bid:"), positionData.getCurrentRoundPoints());
+			}else{
+				newText = getDisplayString(southInfoField.getText().indexOf("Points:") + 6, southInfoField.getText().indexOf("Bid:"), positionData.getCurrentRoundPoints());
+			}
+		}
+		if (Integer.MIN_VALUE != positionData.getBid()) {
+			if (null != newText) {
+				newText = getDisplayString(newText.lastIndexOf(":"), newText.length() - 1, positionData.getCurrentRoundPoints());
+			}else{
+				newText = getDisplayString(southInfoField.getText().lastIndexOf(":") + 6, southInfoField.getText().length() - 1, positionData.getCurrentRoundPoints());
+			}
+		}
+		
+		southInfoField.setText(newText);
+		southInfoField.validate();
+		southCardsPanel.validate();
+		southPanel.validate();
+	}
+	
+	private String getDisplayString(int firstIndex, int secondIndex, int newData){
+		StringBuilder displayStringBuilder = new StringBuilder();
+		displayStringBuilder.append(southInfoField.getText().substring(0, firstIndex + 1));
+		displayStringBuilder.append("  ");
+		displayStringBuilder.append(newData);
+		displayStringBuilder.append("	");
+		displayStringBuilder.append(southInfoField.getText().substring(secondIndex));
+		
+		return displayStringBuilder.toString();
 	}
 
 }

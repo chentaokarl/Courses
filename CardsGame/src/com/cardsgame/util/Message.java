@@ -6,6 +6,8 @@ package com.cardsgame.util;
 import java.io.Serializable;
 import java.security.PublicKey;
 import java.util.List;
+
+import javax.imageio.stream.MemoryCacheImageInputStream;
 import javax.print.DocFlavor.STRING;
 
 /**
@@ -19,7 +21,11 @@ public class Message implements Serializable {
 	private String message=null;
 	private boolean toBidFlag=false;
 	private boolean toPlayFlag=false;
-	 
+	private int positionNum = Integer.MIN_VALUE;
+	private PositionData updateData = null;
+	
+	private PositionData[] positionDatas = null; 
+	
 	public Message(){
 		
 	}
@@ -83,5 +89,43 @@ public class Message implements Serializable {
 	public void settoPlayFlag(boolean flag){
 		this.toPlayFlag=flag;
 	}
+	/**
+	 * @return the positionNum
+	 */
+	public int getPositionNum() {
+		return positionNum;
+	}
+	/**
+	 * @param positionNum the positionNum to set
+	 */
+	public void setPositionNum(int positionNum) {
+		this.positionNum = positionNum;
+	}
+	/**
+	 * @return the positionDatas
+	 */
+	public PositionData[] getPositionDatas() {
+		return positionDatas;
+	}
+	/**
+	 * @param positionDatas the positionDatas to set
+	 */
+	public void setPositionDatas(PositionData[] positionDatas) {
+		this.positionDatas = positionDatas;
+	}
+	/**
+	 * @return the updateData
+	 */
+	public PositionData getUpdateData() {
+		return updateData;
+	}
+	/**
+	 * @param updateData the updateData to set
+	 */
+	public void setUpdateData(PositionData updateData) {
+		this.updateData = updateData;
+	}
+	
+	
 
 }

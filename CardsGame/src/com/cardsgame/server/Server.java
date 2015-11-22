@@ -1,289 +1,258 @@
 package com.cardsgame.server;
 
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
+
+import javax.crypto.SealedObject;
+
+import javax.security.auth.kerberos.KerberosTicket;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
+import java.security.Key;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+
+import com.cardsgame.server.Server.SendMsg;
+import com.cardsgame.util.Message;
+import com.cardsgame.util.MessageHandler;
+import com.cardsgame.util.MessageHandlerInterface;
+import com.cardsgame.util.keys.KeysManager;
+
+import java.util.*;
+import java.util.PrimitiveIterator.OfDouble;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.awt.Dialog.ModalExclusionType;
+import java.io.*;
+/**
+ * 
+ */
 
-import javax.swing.JButton;
-import javax.swing.JTextArea;
+/**
+ * @author Tao
+ *
+ */
 
-import com.alibaba.message.ListMessage;
-import com.alibaba.message.Message;
-import com.alibaba.user.AddUser;
-import com.alibaba.user.CheckIn;
 
 public class Server {
-	int count = 0;//���ڼ���(�������ӿͻ���)
-	CheckIn ci ;//���ں˲��û���������
-	Socket sk;//���ڽ������Կͻ��˵�Socket
-	Socket ssend;//���ڷ���ʱ�õ�list�е�Socket
-	ServerSocket ss;//���ڽ���������
-	JButton send;//���ڽ�������CocoJFrame�������еİ�ť,�Ա㴴����ť�ļ���
-	Message msg; //���ڽ������Կͻ��˵ķ�װ��Ϣ��ͷ��͵ķ�װ��Ϣ��
-	Message rsmsg;//������ת�ͻ��������Ϣ�ķ�װ��Ϣ��
-	CocoJFrame coco;//���ڴ���һ�����������(û��ʵ���ô�,����ɾ��)
-	JTextArea input;//���ڽ�������CocoJFrame�е�input,������ʾ���յ�����Ϣ
-	JTextArea output;//���ڽ�������CocoJFrame�е�output,������ʾ���͵���Ϣ
-	ObjectOutputStream os;//���ڷ���ʱ�õ�listo�е�ObjectOutputStream
-	String deletename = new String();//���ڽ������Կͻ��˵�������Ϣ�е�����,�Ա��б��еĸ���ɾ��
-	ListMessage lmsg = new ListMessage();//���ڷ�װmessage���������ߵĿͻ�����
-	ArrayList list = new ArrayList();//���ڴ洢�Ѿ����ӵĿͻ���Socket
-	ArrayList listo = new ArrayList();//���ڴ洢�����Ѿ����ӵĿͻ���Socket��OutputStream�����ObjectOutputStream
-	ArrayList listi = new ArrayList();//���ڴ洢�����Ѿ����ӵĿͻ���Socket��InputStream�����ObjectInputStream
-	ArrayList listname = new ArrayList();//���ڴ洢�����û�������,�Ա㷢�͸��û������估ʱ����
-	AddUser add;//ע���û���
-	SimpleDateFormat myFmt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");//��ʽ��ʱ��
-   
-	/**
-	 * Server:used to accept link 
-	 * Made by TaoChen
-	 * Time:2010-04
-	 */
+	class MainServer {
+		private ServerSocket serverSocket = null;
+		List<String> currentUserList = new ArrayList();
+		User[] user = new User[4];
+		List<String> cards = new ArrayList();
+		//initialize cards
+		int [] currentScore = new int[4];
+		int winner=-1;
 	
-	//������
-	public Server() {
-		// TODO Auto-generated constructor stub
-		coco = new CocoJFrame("CoCo-Server");//����һ������,������ʾ��Ϣ
-		coco.myFrame.setDefaultCloseOperation(coco.myFrame.EXIT_ON_CLOSE);//�趨���洰�ڹر�ʱ�˳�����
-		this.send = coco.send;//�������Խ����send��ť
-		input = coco.input;
-		output = coco.output;
-		send.addActionListener(new ActionListener() {//��send��ť��ӷ��ͼ���
+		public MainServer() {
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				SendMsg sendmsg = new SendMsg();
-				sendmsg.start();//����������Ϣ���߳�
+			try {
+				serverSocket = new ServerSocket(12345);
+			} catch (IOException e) {
+				System.err.println("Could not listen on port: " + 12345);
+				System.exit(-1);
 			}
-		});
-	}
-	
-    //�������,��������Server����
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		Server server = new Server();
-		server.startServer();
-
-	}
-
-	//����������,�ȴ��ͻ������ӣ�������һЩ���Ӻ�Ĵ���
-	public void startServer() {
-		try {
-			ObjectInputStream fois;
-			ObjectOutputStream foos;
-			ss = new ServerSocket(9999);//��������
-			msg = new Message("server", "", new Date());//�Է�װ��Ϣ���ʼ��,�����ָ��
-			while (true) {//ѭ���ȴ�����,ʵ�ֶ�ͻ�����
-				ssend = ss.accept();//���ܿͻ�������
-				list.add(ssend);
-				listi.add(new ObjectInputStream(ssend.getInputStream()));
-				listo.add(new ObjectOutputStream(ssend.getOutputStream()));
-				fois = (ObjectInputStream) listi.get(listi.size()-1);
-				foos = (ObjectOutputStream) listo.get(listo.size()-1);
-				Message mname = (Message) fois.readObject();
-				if(mname.isRegister()){
-					list.remove(list.size()-1);
-					listi.remove(listi.size()-1);
-					listo.remove(listo.size()-1);
-					ServerRegister sr = new ServerRegister(foos,fois,mname);
-					sr.start();
-				}else{
-				ci = new CheckIn(mname.getName(),mname.getPsw());
-				ci.checkin();
-				if(ci.isFlag()){
-					if(ci.isFlag1()){
-						int i = 0;
-						for( ;i< listname.size();i++){
-							String name = (String) listname.get(i);
-							if(mname.getName().equals(name)){
-								mname.setState(false);
-								mname.setMsg("�û��ѵ�¼");
-								foos.writeObject(mname);
-								fois.close();
-								foos.close();
-								list.remove(list.size()-1);
-								listi.remove(listi.size()-1);
-								listo.remove(listo.size()-1);
-								break;
-							}
-						}
-						if(i==listname.size()){
-						listname.add(mname.getName());
-						mname.setState(true);
-						foos.writeObject(mname);
-						lmsg.setMsg(mname);
-						lmsg.setNamenext((String) listname.get(listname.size() - 1));
-						SendMsg sendmsg = new SendMsg();
-						sendmsg.start();
-						ReadMsg read = new ReadMsg((ObjectInputStream) listi.get(listi.size()-1));
-						read.start();
-						}
-					}else{
-						msg.setState(false);
-						msg.setMsg("�������");
-						foos.writeObject(msg);
-						fois.close();
-						foos.close();
-						list.remove(list.size()-1);
-						listi.remove(listi.size()-1);
-						listo.remove(listo.size()-1);
-						
-					}
-				}else{
-					msg.setState(false);
-					msg.setMsg("�û������ڣ���ע��");
-					foos.writeObject(msg);
-					fois.close();
-					foos.close();
-					list.remove(list.size()-1);
-					listi.remove(listi.size()-1);
-					listo.remove(listo.size()-1);
-				}
+			initializeCards();
+			setup();
+			int starter=0;
+			while(winner<0){
+				shuffle();
+				Bid(starter);
+				Play(starter);
 				
+				starter=(starter+1) % 4;
 			}
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			// System.out.println("socket closed");
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-	}
-    //��Ϣ�����߳�,ͨ����ť��������
-	class SendMsg extends Thread {
-		Socket sk;
-		ObjectOutputStream os;
-		ListMessage lmsg = new ListMessage();
 		
-		public SendMsg() {
-			// TODO Auto-generated constructor stub
+		
+		public List<String> getCards(){
+			return cards;
 		}
-
-		public void run() {
-			try {
-				
-				String str = output.getText();
-				msg.setMsg(str);
-				msg.setOnlist(listname);
-				lmsg.setDeletename(deletename);
-				lmsg.setMsg(msg);
-				if (listname.size() != 0)
-					lmsg.setNamenext((String) listname
-									.get(listname.size() - 1));
-				for (int i = 0; i < list.size(); i++) {
-					sk = (Socket) list.get(i);
-					os = (ObjectOutputStream) listo.get(i);
-					os.writeObject(lmsg);
-				}
-				input.append("��˵:" + myFmt.format(new Date()) + "\n" + str + "\n");
-				input.setCaretPosition(input.getText().length()); 
-				output.setText("");
-				deletename = "";
-
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				// System.out.println("socket closed");
-			}
-		}
-	}
-   //������Ϣ�߳�,���ڳ���״̬
-	class ReadMsg extends Thread {
-		ObjectInputStream ois;
-
-		public ReadMsg(ObjectInputStream ois) {
-			// TODO Auto-generated constructor stub
-			this.ois = ois;
-		}
-
-		public void run() {
-			try {
-
-				while (true) {
-					lmsg = (ListMessage) ois.readObject();
-					if (lmsg.getMsg().getState()) {
-						msg = lmsg.getMsg();
-						msg.setOnlist(listname);
-						rsmsg = msg;
-						RSendMsg rsend = new RSendMsg();
-						rsend.start();
-					} else {
-						for (int i = 0; i < listname.size(); i++) {
-							if (((String) listname.get(i)).equals(lmsg.getMsg()
-									.getName())) {
-								((InputStream) listi.get(i)).close();
-								((OutputStream) listo.get(i)).close();
-								((Socket) list.get(i)).close();
-								listi.remove(i);
-								listo.remove(i);
-								list.remove(i);
-								listname.remove(i);
-
-							}
-
-						}
+	
+		//process
+		public void initializeCards(){
+			for (int i=0; i<4; i++){
+				for(int j=0; j<13; j++){
+					if(i==0)cards.add("h"+j);
+					else if (i==1)cards.add("s"+j);
+					else if(i==2)cards.add("d"+j);
+					else cards.add("c"+j);
 					}
 				}
-			} catch (IOException e) {
-				if (!listname.isEmpty()) {
-					System.out.println(listname.get(listname.size() - 1));
-				
-				deletename = lmsg.getMsg().getName();
-				System.out.println(deletename);
-				SendMsg sendmsg = new SendMsg();
-				sendmsg.start();
+			}
+		
+		public void setup() {
+			try {
+				MessageHandlerInterface mhi = new MessageHandler();
+
+				for (int i = 0; i < 4; i++) {
+					System.out.println("Waiting for connection");
+					this.user[i].setUserSocket(this.serverSocket.accept());
+					System.out.println("User " + (i + 1) + " connected");
+					String userName = "User" + (i + 1);
+					currentUserList.add(userName);
+					Message sMsg = null;
+
+					// send current user list to the other users in the list
+					for (int j = 0; j <= i; j++) {
+						sMsg = new Message();
+						sMsg.setPublicKey(KeysManager.getInstance().getMyPublicKey());
+						sMsg.setUserName(userName);
+						sMsg.setUserList(currentUserList);
+						mhi.sendMsg(user[i].getUserSocket(), sMsg);
+					}
+
+					if (i != 3) {
+						System.out.println("Waiting for " + (3 - i) + " more connections");
+					} else
+						System.out.println("Game Start");
+
 				}
 
-				// TODO Auto-generated catch block
-				// e.printStackTrace();
-				// System.out.println("socket closed");
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
 		}
-	}
-    //ת����Ϣ�߳�,ʵ�ֿͻ��������
-	class RSendMsg extends Thread {
-		ListMessage lmsg = new ListMessage();
+		public void shuffle(){
+			Collections.shuffle(cards);
+		}
+		public void Bid(int starter) {
+			MessageHandlerInterface mhiBid = new MessageHandler();
+			int bidN = -1;
+			int k=starter;
+			for (int i = 0; i < 4; i++) {
+				k=k%4;
+				Message msg=new Message();
+				// set toBidFlag==true
+				msg.settoBidFlag(true);
+				msg.setMessage("It's your turn to bid");
+				mhiBid.sendMsg(this.user[i].getUserSocket(), msg);
+				while(bidN<0){
+					bidN=Integer.parseInt(mhiBid.readString(this.user[i].getUserSocket()));
+				}
+				user[k].bidNumber = bidN;
+				//inform all the users the bid number of Useri
+				for(int j = 0; j < 4; j++){
+					mhiBid.sendMsg(user[j].getUserSocket(), "User" + (k+1) + " bid "+ bidN);
+				}
+				bidN=-1;
+				k++;
+				
+				
+			}
+		}
+		public void Play(int starter){
+			MessageHandlerInterface mhiPlay = new MessageHandler();
+			String cardN=null;
+			int roundStarter=starter;
+			int j=starter;
+			//first round
+			for(int k=0;k<13;k++){
+				 j= roundStarter;
+				for (int i = 0; i<4; i++){
+					j= j % 4;
+					Message msg=new Message();
+					// set toPlayFlag==true
+					msg.settoPlayFlag(true);
+					msg.setMessage("It's your turn to play");
+					mhiPlay.sendMsg(this.user[i].getUserSocket(), msg);
+					//block till get cardN
+					while(cardN==null){
+					cardN=mhiPlay.readString(this.user[i].getUserSocket());
+					
+					}
+					user[i].setCurrentCard(cardN);
+					cardN=null;
+					user[i].cardsLeft=12-k;
+					j++;
+				}
+				
+				roundStarter= setRoundWinner(roundStarter);
+				(user[roundStarter].points)++;
+			}
+			int temp=calWinner();
+			//send Useri the information of himself
+			for(int i=0;i<4;i++){
+				mhiPlay.sendMsg(user[i].getUserSocket(), user[i]);
+			}
+			
+			if(temp>0){
+				winner=temp;
+				//send winner to all
+				for(int i=0;i<4;i++){
+					mhiPlay.sendMsg(user[i].getUserSocket(), "The winner is User"+ winner);
+				}
+				//end game
+			};
+		}
+		public int setRoundWinner(int roundStarter){
+			int i=roundStarter;			
+			int indexOfCurrentWinner=roundStarter;
+			String suit=user[i].getCurrentCard().substring(0, 1);
+			String number=user[i].getCurrentCard().substring(1);
+			int tranferToNumber= Integer.parseInt(number);
 
-		public void run() {
-			try {
-				rsmsg.setOnlist(listname);
-				lmsg.setMsg(rsmsg);
-				lmsg.setNamenext((String) listname.get(listname.size() - 1));
-				for (int j = 0; j < listname.size(); j++) {
-					if (rsmsg.getCname().equals("All")) {
-						os = (ObjectOutputStream) listo.get(j);
-						os.writeObject(lmsg);
-					} else if (rsmsg.getCname()
-							.equals((String) listname.get(j))) {
-						os = (ObjectOutputStream) listo.get(j);
-						os.writeObject(lmsg);
+			for(int j=0;j<3;j++){
+				i++;
+				i=i%4;
+				//if the suit is the same as the first play
+				if(user[i].getCurrentCard().substring(0, 1).equals(suit)){
+					
+					String number1=user[i].getCurrentCard().substring(1);
+					int tranferToNumber1= Integer.parseInt(number1);
+					if(tranferToNumber1>tranferToNumber){
+						indexOfCurrentWinner=i;
+						tranferToNumber= tranferToNumber1;
 					}
 				}
-				input.append(rsmsg.toString());
-				output.setText("");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
+				
 			}
+			return indexOfCurrentWinner;
+		}
+		public int calWinner(){
+			int [] total=new int[4];
+			for(int k=0;k<4;k++)total[k]=0;
+			boolean winnerFlag=false;
+			for(int i=0;i<4;i++){
+				if(user[i].points>=user[i].bidNumber){
+					user[i].currentScore=user[i].points - user[i].bidNumber 
+										+ 10*user[i].bidNumber; 
+					user[i].totalScore+=user[i].currentScore;
+					if(user[i].totalScore>250)
+					{
+						winnerFlag=true;
+						total[i]=user[i].totalScore;
+					}
+					
+				}
+				else 
+					{
+					user[i].currentScore= user[i].bidNumber*(-10);
+					user[i].totalScore+=user[i].currentScore;
+					if(user[i].totalScore>250)
+					{
+						winnerFlag=true;
+						total[i]=user[i].totalScore;
+					}
+					}
+				//send it to client
+				currentScore[i]=user[i].currentScore;
+			}
+			int temp=0;
+			if(winnerFlag==true){
+				for(int j=0;j<3;j++){
+				if(total[temp]<total[j+1])temp=j+1;
+				}
+				return temp;
+			}
+			else return -1;
+			
 		}
 	}
 }

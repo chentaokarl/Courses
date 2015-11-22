@@ -1,6 +1,7 @@
 package com.cardsgame.util;
 
 import java.awt.image.renderable.RenderableImage;
+import java.io.Serializable;
 import java.security.PublicKey;
 
 import javax.crypto.Cipher;
@@ -24,7 +25,7 @@ public class Encryption {
 		return encryption;
 	}
 
-	public SealedObject encryptMessage(Message message, PublicKey publicKey) throws Exception {
+	public SealedObject encryptMessage(Serializable message, PublicKey publicKey) throws Exception {
 		// get an RSA cipher object
 		final Cipher cipher = Cipher.getInstance(PADDING);
 		// encrypt object using the public key
@@ -32,14 +33,14 @@ public class Encryption {
 		return new SealedObject(message, cipher);
 	}
 
-	public Message decryptMessage(SealedObject rcv) throws Exception {
+	public Object decryptMessage(SealedObject rcv) throws Exception {
 		// get an RSA cipher object
 		final Cipher cipher = Cipher.getInstance(PADDING);
 
 		// decrypt object using the public key
 		cipher.init(Cipher.DECRYPT_MODE, KeysManager.getInstance().getMyPrivateKey());
 
-		return (Message) rcv.getObject(cipher);
+		return rcv.getObject(cipher);
 	}
 
 }
