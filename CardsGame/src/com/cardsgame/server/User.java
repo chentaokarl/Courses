@@ -1,19 +1,20 @@
 package com.cardsgame.server;
 
 import java.net.Socket;
-import java.security.PublicKey;
+import java.util.ArrayList;
+import java.util.List;
 
 public class User {
 	private Socket userSocket=null;
-	//boolean toPlayFlag=false;
-	//boolean toBidFlag=false;
+	private String userName = null;
 	int bidNumber=0;
 	int points=0;//0-13
 	int cardsLeft=0;//0-13
 	int totalScore=0;//total score of the whole game
 	int currentScore=0;
 	private String currentCard=null;
-	private PublicKey userPublicKey = null;
+	private int positionNum = Integer.MIN_VALUE;
+	private List<String> cardlist = new ArrayList<>();
 	
 	public User(Socket socket){
 		userSocket = socket;
@@ -37,18 +38,42 @@ public class User {
 		this.currentCard = currentCard;
 	}
 	/**
-	 * @return the userPublicKey
+	 * @return the positionNum
 	 */
-	public PublicKey getUserPublicKey() {
-		return userPublicKey;
+	public int getPositionNum() {
+		return positionNum;
 	}
 	/**
-	 * @param userPublicKey the userPublicKey to set
+	 * @param positionNum the positionNum to set
 	 */
-	public void setUserPublicKey(PublicKey userPublicKey) {
-		this.userPublicKey = userPublicKey;
+	public void setPositionNum(int positionNum) {
+		this.positionNum = positionNum;
 	}
-
+	/**
+	 * @return the userName
+	 */
+	public String getUserName() {
+		return userName;
+	}
+	/**
+	 * @param userName the userName to set
+	 */
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	/**
+	 * @return the cardlist
+	 */
+	public List<String> getCardlist() {
+		return cardlist;
+	}
+	/**
+	 * @param cardlist the cardlist to set
+	 */
+	public void setCardlist(List<String> cardlist) {
+		this.cardlist = cardlist;
+	}
+	
 	
 	
 }

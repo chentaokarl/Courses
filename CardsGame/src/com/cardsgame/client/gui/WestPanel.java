@@ -3,14 +3,13 @@
  */
 package com.cardsgame.client.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.cardsgame.util.PositionData;
+import com.cardsgame.util.PositionInitData;
 
 /**
  * @author Tao
@@ -125,9 +124,11 @@ public class WestPanel extends JPanel {
 		this.positionNum = positionNum;
 	}
 
-	public void initData(PositionData positionData) {
+	public void initData(PositionInitData positionData) {
 		setPositionNum(positionData.getPositionNum());
 		westPlayerName.setText(positionData.getUserName());
+		westPlayerImg.setIcon(Util.getImage(Util.DEFAULT_PLAYER_IMAGE));
+		westPlayerImg.validate();
 		westPlayerName.validate();
 		westPanel.validate();
 	}

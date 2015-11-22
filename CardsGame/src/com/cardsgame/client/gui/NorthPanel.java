@@ -3,8 +3,6 @@
  */
 package com.cardsgame.client.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.JLabel;
@@ -13,6 +11,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import com.cardsgame.util.PositionData;
+import com.cardsgame.util.PositionInitData;
 
 /**
  * @author Tao
@@ -147,9 +146,11 @@ public class NorthPanel extends JPanel {
 		this.positionNum = positionNum;
 	}
 	
-	public void initData(PositionData positionData) {
+	public void initData(PositionInitData positionData) {
 		setPositionNum(positionData.getPositionNum());
 		northPlayerName.setText(positionData.getUserName());
+		northPlayerImage.setIcon(Util.getImage(Util.DEFAULT_PLAYER_IMAGE));
+		northPlayerImage.validate();
 		northPlayerName.validate();
 		northPanel.validate();
 	}

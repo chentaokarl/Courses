@@ -6,6 +6,7 @@ package com.cardsgame.util;
 import java.io.Serializable;
 import java.security.PublicKey;
 import java.util.List;
+import java.util.Map;
 
 import javax.imageio.stream.MemoryCacheImageInputStream;
 import javax.print.DocFlavor.STRING;
@@ -17,30 +18,15 @@ import javax.print.DocFlavor.STRING;
 public class Message implements Serializable {
 	private String userName = null;
 	private PublicKey publicKey = null;
-	private List<String> userList = null;
 	private String message=null;
 	private boolean toBidFlag=false;
 	private boolean toPlayFlag=false;
 	private int positionNum = Integer.MIN_VALUE;
-	private PositionData updateData = null;
 	
-	private PositionData[] positionDatas = null; 
+	private PositionInitData[] positionInitDatas = null;
 	
 	public Message(){
 		
-	}
-	/**
-	 * @return the userList
-	 */
-	public List<String> getUserList() {
-		return userList;
-	}
-
-	/**
-	 * @param userList the userList to set
-	 */
-	public void setUserList(List<String> userList) {
-		this.userList = userList;
 	}
 
 	/**
@@ -77,18 +63,7 @@ public class Message implements Serializable {
 	public String getMessage(){
 		return this.message;
 	}
-	public boolean gettoBidFlag(){
-		return this.toBidFlag;
-	}
-	public void settoBidFlag(boolean flag){
-		this.toBidFlag=flag;
-	}
-	public boolean gettoPlayFlag(){
-		return this.toPlayFlag;
-	}
-	public void settoPlayFlag(boolean flag){
-		this.toPlayFlag=flag;
-	}
+	
 	/**
 	 * @return the positionNum
 	 */
@@ -96,34 +71,46 @@ public class Message implements Serializable {
 		return positionNum;
 	}
 	/**
+	 * @return the toBidFlag
+	 */
+	public boolean isToBidFlag() {
+		return toBidFlag;
+	}
+
+	/**
+	 * @param toBidFlag the toBidFlag to set
+	 */
+	public void setToBidFlag(boolean toBidFlag) {
+		this.toBidFlag = toBidFlag;
+	}
+
+	/**
+	 * @return the toPlayFlag
+	 */
+	public boolean isToPlayFlag() {
+		return toPlayFlag;
+	}
+
+	/**
+	 * @param toPlayFlag the toPlayFlag to set
+	 */
+	public void setToPlayFlag(boolean toPlayFlag) {
+		this.toPlayFlag = toPlayFlag;
+	}
+
+	/**
 	 * @param positionNum the positionNum to set
 	 */
 	public void setPositionNum(int positionNum) {
 		this.positionNum = positionNum;
 	}
-	/**
-	 * @return the positionDatas
-	 */
-	public PositionData[] getPositionDatas() {
-		return positionDatas;
+
+	public PositionInitData[] getPositionInitDatas() {
+		return positionInitDatas;
 	}
-	/**
-	 * @param positionDatas the positionDatas to set
-	 */
-	public void setPositionDatas(PositionData[] positionDatas) {
-		this.positionDatas = positionDatas;
-	}
-	/**
-	 * @return the updateData
-	 */
-	public PositionData getUpdateData() {
-		return updateData;
-	}
-	/**
-	 * @param updateData the updateData to set
-	 */
-	public void setUpdateData(PositionData updateData) {
-		this.updateData = updateData;
+
+	public void setPositionInitDatas(PositionInitData[] positionInitDatas) {
+		this.positionInitDatas = positionInitDatas;
 	}
 	
 	

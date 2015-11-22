@@ -28,11 +28,13 @@ public class MessageHandler implements MessageHandlerInterface {
 	@Override
 	public void sendMsg(Socket socket, Serializable message) throws Exception {
 		PublicKey publicKey = null;
-		if (message instanceof PositionData) {
-			publicKey = KeysManager.getInstance().getUserPublicKey(((PositionData) message).getUserName());
+		if (message instanceof PositionInitData) {
+			publicKey = KeysManager.getInstance().getUserPublicKey(((PositionInitData) message).getUserName());
 		} else if (message instanceof Message) {
-
 			publicKey = KeysManager.getInstance().getUserPublicKey(((Message) message).getUserName());
+		}else if (message instanceof String) {
+			sendString(socket, (String) message);
+			return;
 		}
 
 		ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());

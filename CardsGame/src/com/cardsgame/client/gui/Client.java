@@ -10,11 +10,13 @@ import java.io.Serializable;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.PublicKey;
+import java.util.ArrayList;
 
 import com.cardsgame.util.Message;
 import com.cardsgame.util.MessageHandler;
 import com.cardsgame.util.MessageHandlerInterface;
 import com.cardsgame.util.PositionData;
+import com.cardsgame.util.PositionInitData;
 import com.cardsgame.util.keys.KeysManager;
 
 /**
@@ -64,7 +66,8 @@ public class Client {
 			KeysManager.getInstance().putUserPublicKey(SERVER_NAME, msg.getPublicKey());
 		}
 		
-		TableFrame.getInstance().initTableData(msg.getPositionNum(),msg.getPositionDatas());
+		TableFrame.getInstance().initTableData(msg.getPositionNum(),msg.getPositionInitDatas());
+		new SendThread(KeysManager.getInstance().getMyPublicKey()).start();
 		new ReadThread().start();
 	}
 	
@@ -95,11 +98,14 @@ public class Client {
 					if (message instanceof PositionData) {
 						TableFrame.getInstance().updateTableData((PositionData)message);
 					}else if (message instanceof Message) {
-						TableFrame.getInstance().updateTableData(((Message)message).getUpdateData());
 						TableFrame.getInstance().updateCenterInfo(((Message)message).getMessage());
-						if(((Message)message).gettoPlayFlag()){
+						if(((Message)message).isToPlayFlag()){
 							Util.setMyTurnFlag(true);
 						}
+					}else if (message instanceof PositionInitData) {
+						TableFrame.getInstance().initNewData((PositionInitData)message);
+					}else if (message instanceof ArrayList) {
+						TableFrame.getInstance().initCards((String[]) ((ArrayList)message).toArray());
 					}
 				}
 			} catch (Exception e) {

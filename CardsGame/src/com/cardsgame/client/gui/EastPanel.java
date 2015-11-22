@@ -3,14 +3,13 @@
  */
 package com.cardsgame.client.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.cardsgame.util.PositionData;
+import com.cardsgame.util.PositionInitData;
 
 /**
  * @author Tao
@@ -139,9 +138,11 @@ public class EastPanel extends JPanel {
 		this.positionNum = positionNum;
 	}
 
-	public void initData(PositionData positionData) {
+	public void initData(PositionInitData positionData) {
 		setPositionNum(positionData.getPositionNum());
 		eastPlayerName.setText(positionData.getUserName());
+		eastPlayerImg.setIcon(Util.getImage(Util.DEFAULT_PLAYER_IMAGE));
+		eastPlayerImg.validate();
 		eastPlayerName.validate();
 		eastPanel.validate();
 	}

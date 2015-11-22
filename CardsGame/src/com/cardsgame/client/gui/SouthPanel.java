@@ -16,6 +16,7 @@ import javax.xml.transform.Source;
 
 import com.cardsgame.util.Message;
 import com.cardsgame.util.PositionData;
+import com.cardsgame.util.PositionInitData;
 
 /**
  * @author Tao
@@ -199,9 +200,11 @@ public class SouthPanel extends JPanel {
 		this.positionNum = positionNum;
 	}
 
-	public void initData(PositionData positionData) {
-		setPositionNum(positionData.getPositionNum());
-		southPlayerName.setText(positionData.getUserName());
+	public void initData(PositionInitData initData) {
+		setPositionNum(initData.getPositionNum());
+		southPlayerName.setText(initData.getUserName());
+		southPlayerImg.setIcon(Util.getImage(Util.DEFAULT_PLAYER_IMAGE));
+		southPlayerImg.validate();
 		southPlayerName.validate();
 		southCardsPanel.validate();
 		southPanel.validate();
