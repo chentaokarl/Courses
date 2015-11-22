@@ -38,8 +38,8 @@ import java.io.*;
  */
 
 
-public class Server {
-	class MainServer {
+
+public	class Server {
 		private ServerSocket serverSocket = null;
 		List<String> currentUserList = new ArrayList();
 		User[] user = new User[4];
@@ -47,8 +47,8 @@ public class Server {
 		//initialize cards
 		int [] currentScore = new int[4];
 		int winner=-1;
-	
-		public MainServer() {
+		
+		public Server() {
 
 			try {
 				serverSocket = new ServerSocket(12345);
@@ -61,6 +61,7 @@ public class Server {
 			int starter=0;
 			while(winner<0){
 				shuffle();
+				sendCards(starter);
 				Bid(starter);
 				Play(starter);
 				
@@ -68,11 +69,13 @@ public class Server {
 			}
 		}
 		
-		
+		public static void main(String args[]){
+			Server server=new Server();
+		}
 		public List<String> getCards(){
 			return cards;
 		}
-	
+		
 		//process
 		public void initializeCards(){
 			for (int i=0; i<4; i++){
@@ -104,7 +107,11 @@ public class Server {
 						sMsg.setUserName(userName);
 						sMsg.setUserList(currentUserList);
 						mhi.sendMsg(user[i].getUserSocket(), sMsg);
+						//read public key;
 					}
+					//set user public key.
+					String pk=mhi.readString(user[i].getUserSocket());
+					KeysManager.getInstance().putUserPublicKey("user"+i,KeysManager.getInstance().getUserPublicKey(pk) );
 
 					if (i != 3) {
 						System.out.println("Waiting for " + (3 - i) + " more connections");
@@ -121,6 +128,18 @@ public class Server {
 		public void shuffle(){
 			Collections.shuffle(cards);
 		}
+		  public void sendCards(int starter){
+	            MessageHandlerInterface mhiSend = new MessageHandler();
+	            int start=0;
+	            int end=12;
+	            for(int i=0;i<4;i++){
+	             user[starter].cardlist=cards.subList(start, end);
+	              mhiSend.sendMsg(user[i].getUserSocket(), cards.subList(start, end));
+	              start=start+13;
+	              end=end+13;
+	              starter++;
+	            }
+	        }
 		public void Bid(int starter) {
 			MessageHandlerInterface mhiBid = new MessageHandler();
 			int bidN = -1;
@@ -131,14 +150,40 @@ public class Server {
 				// set toBidFlag==true
 				msg.settoBidFlag(true);
 				msg.setMessage("It's your turn to bid");
-				mhiBid.sendMsg(this.user[i].getUserSocket(), msg);
-				while(bidN<0){
+				try {
+					mhiBid.sendMsg(this.user[i].getUserSocket(), msg);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				while(bidN<0|| bidN>13){
+					try {
+						mhiBid.sendMsg(this.user[i].getUserSocket(), msg);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				try {
 					bidN=Integer.parseInt(mhiBid.readString(this.user[i].getUserSocket()));
+				} catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+					
 				}
 				user[k].bidNumber = bidN;
 				//inform all the users the bid number of Useri
 				for(int j = 0; j < 4; j++){
-					mhiBid.sendMsg(user[j].getUserSocket(), "User" + (k+1) + " bid "+ bidN);
+					try {
+						mhiBid.sendString(user[j].getUserSocket(), "User" + (k+1) + " bid "+ bidN);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				bidN=-1;
 				k++;
@@ -151,6 +196,7 @@ public class Server {
 			String cardN=null;
 			int roundStarter=starter;
 			int j=starter;
+			String roundSuit=null;
 			//first round
 			for(int k=0;k<13;k++){
 				 j= roundStarter;
@@ -160,13 +206,26 @@ public class Server {
 					// set toPlayFlag==true
 					msg.settoPlayFlag(true);
 					msg.setMessage("It's your turn to play");
-					mhiPlay.sendMsg(this.user[i].getUserSocket(), msg);
-					//block till get cardN
-					while(cardN==null){
-					cardN=mhiPlay.readString(this.user[i].getUserSocket());
+					try {
+						mhiPlay.sendMsg(this.user[i].getUserSocket(), msg);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					//block till get valid cardN
+					while(cardN==null&&!cardisValid(user[i],cardN,roundSuit)){
+					try {
+						cardN=mhiPlay.readString(this.user[i].getUserSocket());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					
 					}
 					user[i].setCurrentCard(cardN);
+					if(i==0){
+						roundSuit=cardN.substring(0, 1);
+					}
 					cardN=null;
 					user[i].cardsLeft=12-k;
 					j++;
@@ -178,17 +237,51 @@ public class Server {
 			int temp=calWinner();
 			//send Useri the information of himself
 			for(int i=0;i<4;i++){
-				mhiPlay.sendMsg(user[i].getUserSocket(), user[i]);
+				mhiPlay.senMsg(user[i].getUserSocket(), user[i]);
 			}
 			
 			if(temp>0){
 				winner=temp;
 				//send winner to all
 				for(int i=0;i<4;i++){
-					mhiPlay.sendMsg(user[i].getUserSocket(), "The winner is User"+ winner);
+					try {
+						mhiPlay.sendString(user[i].getUserSocket(), "The winner is User"+ winner);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				//end game
 			};
+		}
+		public boolean cardisValid(User user, String card, String roundSuit){
+			if(user.cardlist.contains(card)){
+				if(roundSuit!=null){
+					
+					if(user.cardlist.contains(roundSuit+"1")||
+							user.cardlist.contains(roundSuit+"2")||
+							user.cardlist.contains(roundSuit+"3")||
+							user.cardlist.contains(roundSuit+"4")||
+							user.cardlist.contains(roundSuit+"5")||
+							user.cardlist.contains(roundSuit+"6")||
+							user.cardlist.contains(roundSuit+"7")||
+							user.cardlist.contains(roundSuit+"8")||
+							user.cardlist.contains(roundSuit+"9")||
+							user.cardlist.contains(roundSuit+"10")||
+							user.cardlist.contains(roundSuit+"11")||
+							user.cardlist.contains(roundSuit+"12")||
+							user.cardlist.contains(roundSuit+"13")){
+					if(card.substring(0, 1).equals(roundSuit)){
+						return true;
+					}
+					else return false;
+				}
+					else return true;
+				}
+				else return true;
+				
+			}
+			else return false;
 		}
 		public int setRoundWinner(int roundStarter){
 			int i=roundStarter;			
@@ -255,4 +348,4 @@ public class Server {
 			
 		}
 	}
-}
+
