@@ -8,7 +8,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.security.PublicKey;
 
+import com.cardsgame.client.gui.SouthPanel;
+import com.cardsgame.client.gui.TableFrame;
+import com.cardsgame.util.Message;
+import com.cardsgame.util.MessageHandler;
+import com.cardsgame.util.MessageHandlerInterface;
 import com.cardsgame.util.keys.KeysManager;
 
 /**
@@ -19,37 +25,49 @@ public class Client {
 	Socket clientSocket = null;
 	ObjectOutputStream oos = null;
 	ObjectInputStream ois = null;
-	com.cardsgame.util.Message sMsm = null;
+	Message sMsm = null;
+	MessageHandlerInterface messageHandler = null;
+	public static final String SERVER_NAME = "server";
+	public static final String SERVER_IP = "127.0.0.1";
+	public static final int SERVER_PORT = 9999;
 
-	public boolean connect() {
+	private Client() {
 		try {
-			sMsm = new com.cardsgame.util.Message();
-			sMsm.setPublicKey(KeysManager.getInstance().getMyPublicKey());
-			clientSocket = new Socket("127.0.0.1", 9999);
-			oos = new ObjectOutputStream(clientSocket.getOutputStream());
-			ois = new ObjectInputStream(clientSocket.getInputStream());
-			
-			smsg.setName(name);
-			smsg.setPsw(psw);
-			oos.writeObject(smsg);
-			msg = (Message) ois.readObject();
-			flag = msg.getState();
+			if (connect()) {
+				messageHandler = new MessageHandler();
+				Message msg = (Message) messageHandler.readMsg(clientSocket);
+				init(msg);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public boolean connect() throws Exception {
+		try {
+			clientSocket = new Socket(SERVER_IP, SERVER_PORT);
+			return true;
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
 		}
-		return flag;
+		return false;
+	}
+
+	private void init(Message msg) {
+		if (null != msg.getPublicKey()) {
+			KeysManager.getInstance().putUserPublicKey(SERVER_NAME, msg.getPublicKey());
+		}
+		TableFrame.getInstance();
 	}
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		new Client();
 	}
 
 }

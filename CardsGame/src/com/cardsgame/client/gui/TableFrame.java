@@ -41,9 +41,6 @@ public class TableFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-
-        
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -84,7 +81,7 @@ public class TableFrame extends javax.swing.JFrame {
         setTitle("Cards Game");
 		setLocationRelativeTo(null);
 		setVisible(true);
-    }// </editor-fold>                        
+    }
 
     public static TableFrame getInstance() {
 		if (null == tableFrame) {

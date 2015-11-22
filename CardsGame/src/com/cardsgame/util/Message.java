@@ -5,7 +5,7 @@ package com.cardsgame.util;
 
 import java.io.Serializable;
 import java.security.PublicKey;
-
+import java.util.List;
 import javax.print.DocFlavor.STRING;
 
 /**
@@ -15,6 +15,27 @@ import javax.print.DocFlavor.STRING;
 public class Message implements Serializable {
 	private String userName = null;
 	private PublicKey publicKey = null;
+	private List<String> userList = null;
+	private String message=null;
+	private boolean toBidFlag=false;
+	private boolean toPlayFlag=false;
+	 
+	public Message(){
+		
+	}
+	/**
+	 * @return the userList
+	 */
+	public List<String> getUserList() {
+		return userList;
+	}
+
+	/**
+	 * @param userList the userList to set
+	 */
+	public void setUserList(List<String> userList) {
+		this.userList = userList;
+	}
 
 	/**
 	 * @return the publicKey
@@ -43,7 +64,24 @@ public class Message implements Serializable {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	
-	
+	public void setMessage(String message) {
+		this.message = message;
+
+	}
+	public String getMessage(){
+		return this.message;
+	}
+	public boolean gettoBidFlag(){
+		return this.toBidFlag;
+	}
+	public void settoBidFlag(boolean flag){
+		this.toBidFlag=flag;
+	}
+	public boolean gettoPlayFlag(){
+		return this.toPlayFlag;
+	}
+	public void settoPlayFlag(boolean flag){
+		this.toPlayFlag=flag;
+	}
 
 }

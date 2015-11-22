@@ -12,6 +12,9 @@ import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.cardsgame.util.Encryption;
 import com.cardsgame.util.EncryptionException;
@@ -25,6 +28,8 @@ public class KeysManager {
 
 	private PublicKey myPublicKey = null;
 	private PrivateKey myPrivateKey = null;
+	
+	private Map<String, PublicKey> userPublicKeys = new HashMap<>();
 
 	private KeysManager() {
 		generateMyKeyPair();
@@ -51,6 +56,9 @@ public class KeysManager {
 
 	protected void generateMyKeyPair() {
 		try {
+			if(checkKeyFile(PUBLIC_KEY_FILE)&&checkKeyFile(PRIVATE_KEY_FILE)){
+				return;
+			}
 			final KeyPairGenerator kg = KeyPairGenerator.getInstance(Encryption.ALGORITHM);
 			final KeyPair keyPair = kg.generateKeyPair();
 			myPrivateKey = keyPair.getPrivate();
@@ -162,5 +170,16 @@ public class KeysManager {
 		}
 
 		return privateKey;
+	}
+	
+	public void putUserPublicKey(String userName, PublicKey pbk){
+		userPublicKeys.put(userName, pbk);
+	}
+	
+	public PublicKey getUserPublicKey(String userName) throws EncryptionException{
+		if (null == userPublicKeys.get(userName)) {
+			throw new EncryptionException("No  public key for user " + userName );
+		}
+		return userPublicKeys.get(userName);
 	}
 }
