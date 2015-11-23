@@ -51,15 +51,14 @@ public class WestPanel extends JPanel {
 		westBid.setFont(new Font("Tahoma", 0, 30));
 		westTotalPoints.setFont(new Font("Tahoma", 0, 30));
 
-		westPlayerName.setText("west");
+		westPlayerName.setText("  ");
 		westCardsNum.setText("Cards Left: ");
 		westPoints.setText("Points: ");
 		westBid.setText("Bid: ");
 		westTotalPoints.setText("Total Points: ");
 
 
-
-        javax.swing.GroupLayout westPanelLayout = new javax.swing.GroupLayout(westPanel);
+		javax.swing.GroupLayout westPanelLayout = new javax.swing.GroupLayout(westPanel);
         westPanel.setLayout(westPanelLayout);
         westPanelLayout.setHorizontalGroup(
             westPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -71,8 +70,8 @@ public class WestPanel extends JPanel {
                             .addComponent(westPlayerImg, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(westTotalPoints)))
                     .addGroup(westPanelLayout.createSequentialGroup()
-                        .addGap(55, 55, 55)
-                        .addComponent(westPlayerName)))
+                        .addGap(50, 50, 50)
+                        .addComponent(westPlayerName, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(westPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(westPanelLayout.createSequentialGroup()
                         .addGap(51, 51, 51)
@@ -89,22 +88,22 @@ public class WestPanel extends JPanel {
             westPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(westPanelLayout.createSequentialGroup()
                 .addGap(8, 8, 8)
-                .addGroup(westPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(westPanelLayout.createSequentialGroup()
+                .addGroup(westPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, westPanelLayout.createSequentialGroup()
                         .addComponent(westPlayerName)
-                        .addGap(3, 3, 3)
-                        .addComponent(westPlayerImg, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(westPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(westTotalPoints)
-                            .addComponent(westPoints)))
+                        .addGap(7, 7, 7)
+                        .addComponent(westPlayerImg, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(westPanelLayout.createSequentialGroup()
                         .addComponent(westCardImg)
                         .addGap(18, 18, 18)
                         .addComponent(westCardsNum)))
+                .addGap(6, 6, 6)
+                .addGroup(westPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(westTotalPoints)
+                    .addComponent(westPoints))
                 .addGap(4, 4, 4)
                 .addComponent(westBid)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(104, Short.MAX_VALUE))
         );
 	}
 	
@@ -127,10 +126,13 @@ public class WestPanel extends JPanel {
 	public void initData(PositionInitData positionData) {
 		setPositionNum(positionData.getPositionNum());
 		westPlayerName.setText(positionData.getUserName());
-		westPlayerImg.setIcon(Util.getImage(Util.DEFAULT_PLAYER_IMAGE));
+		westPlayerImg.setIcon(Util.playerImage);
 		westPlayerImg.validate();
-		westPlayerName.validate();
-		westPanel.validate();
+		westPlayerName.revalidate();
+		westPlayerName.repaint();
+		repaint();
+		revalidate();
+
 	}
 
 	public void updateData(PositionData positionData) {
@@ -155,7 +157,9 @@ public class WestPanel extends JPanel {
 		westCardsNum.validate();
 		westPoints.validate();
 		westBid.validate();
-		westPanel.validate();
-	}
+
+		repaint();
+		revalidate();
+}
 
 }

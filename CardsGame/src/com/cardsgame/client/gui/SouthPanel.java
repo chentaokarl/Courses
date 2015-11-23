@@ -3,18 +3,15 @@
  */
 package com.cardsgame.client.gui;
 
-import java.awt.Color;
 import java.awt.Font;
-import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.net.Socket;
 
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.xml.transform.Source;
 
-import com.cardsgame.util.Message;
+import com.cardsgame.util.MessageHandlerInterface;
 import com.cardsgame.util.PositionData;
 import com.cardsgame.util.PositionInitData;
 
@@ -37,14 +34,19 @@ public class SouthPanel extends JPanel {
 	private JLabel southTotalPoints;
 	private JTextField southInfoField;
 	private int positionNum = Integer.MIN_VALUE;
+	private MessageHandlerInterface messageHandler = null;
+	private Socket clientSocket = null;
+	
 
-	private SouthPanel() {
+	private SouthPanel(MessageHandlerInterface mhi, Socket socket) {
 		super();
+		this.messageHandler = mhi;
+		this.clientSocket = socket;
 	}
 
-	public static SouthPanel getInstance() {
+	public static SouthPanel getInstance(MessageHandlerInterface messageHandler, Socket clientSocket) {
 		if (null == southPanel) {
-			southPanel = new SouthPanel();
+			southPanel = new SouthPanel(messageHandler,clientSocket);
 			southPanel.initComp();
 		}
 		return southPanel;
@@ -53,10 +55,17 @@ public class SouthPanel extends JPanel {
 	private void cardMouseClicked(MouseEvent evt) {
 		if (Util.isMyTurnFlag()) {
 			JLabel source = (JLabel) evt.getSource();
-			PositionData positionData = new PositionData();
-			positionData.setPositionNum(positionNum);
-			positionData.setCardPlayed(source.getName());
-			Client.getInstance().new SendThread(positionData).start();// send played card
+//			PositionData positionData = new PositionData();
+//			positionData.setPositionNum(positionNum);
+//			positionData.setCardPlayed(source.getName());
+			try {
+//				Client.getInstance().sendMsg(source.getName());// send played card
+//				Client.getInstance().messageHandler.sendMsg(Client.getInstance().getClientSocket(), source.getName());
+				messageHandler.sendMsg(clientSocket, source.getName());
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			CenterPanel.getInstance().updateSouthCardPlayed(source.getName());
 			cardsDisplayPanel.remove(source);
@@ -67,6 +76,7 @@ public class SouthPanel extends JPanel {
 			southPanel.validate();
 		} else {
 			//warning to be done.
+			TableFrame.getInstance(messageHandler, clientSocket).showInfoDialogue("Not your turn yet!");
 		}
 	}
 
@@ -139,7 +149,7 @@ public class SouthPanel extends JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        southPlayerName.setText("south");
+        southPlayerName.setText("null");
 
         southInfoField.setText("TotalPoints:	Cards Left:		Points:		Bid:	");
         southInfoField.setFont(new Font("Tahoma", 0, 30));
@@ -203,11 +213,12 @@ public class SouthPanel extends JPanel {
 	public void initData(PositionInitData initData) {
 		setPositionNum(initData.getPositionNum());
 		southPlayerName.setText(initData.getUserName());
-		southPlayerImg.setIcon(Util.getImage(Util.DEFAULT_PLAYER_IMAGE));
+		southPlayerImg.setIcon(Util.playerImage);
 		southPlayerImg.validate();
 		southPlayerName.validate();
 		southCardsPanel.validate();
-		southPanel.validate();
+		repaint();
+		revalidate();
 	}
 	
 	//TotalPoints:Cards Left:		Points:		Bid:	
@@ -232,17 +243,19 @@ public class SouthPanel extends JPanel {
 		}
 		if (Integer.MIN_VALUE != positionData.getBid()) {
 			if (null != newText) {
-				newText = getDisplayString(newText.lastIndexOf(":"), newText.length() - 1, positionData.getCurrentRoundPoints());
+				newText = getDisplayString(newText.lastIndexOf(":"), newText.length() - 1, positionData.getBid());
 			}else{
-				newText = getDisplayString(southInfoField.getText().lastIndexOf(":") + 6, southInfoField.getText().length() - 1, positionData.getCurrentRoundPoints());
+				newText = getDisplayString(southInfoField.getText().lastIndexOf(":") , southInfoField.getText().length() - 1, positionData.getBid());
 			}
 		}
 		
 		southInfoField.setText(newText);
-		southInfoField.validate();
+		southInfoField.repaint();
+		southInfoField.revalidate();
 		southCardsPanel.validate();
-		southPanel.validate();
-	}
+		repaint();
+		revalidate();
+}
 	
 	private String getDisplayString(int firstIndex, int secondIndex, int newData){
 		StringBuilder displayStringBuilder = new StringBuilder();

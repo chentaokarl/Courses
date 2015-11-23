@@ -65,19 +65,6 @@ public class PositionData implements Serializable {
 		this.cardsLeft = cardsLeft;
 	}
 
-	/**
-	 * @return the currentRoundPoints
-	 */
-	public int getCurrentRoundPoints() {
-		return currentRoundPoints;
-	}
-
-	/**
-	 * @param currentRoundPoints the currentRoundPoints to set
-	 */
-	public void setCurrentRoundPoints(int currentRoundPoints) {
-		this.currentRoundPoints = currentRoundPoints;
-	}
 
 	/**
 	 * @return the totalPoints
@@ -126,6 +113,22 @@ public class PositionData implements Serializable {
 	 */
 	public String getCardPlayed() {
 		return cardPlayed;
+	}
+	
+	
+
+	/**
+	 * @return the currentRoundPoints
+	 */
+	public int getCurrentRoundPoints() {
+		return currentRoundPoints;
+	}
+
+	/**
+	 * @param currentRoundPoints the currentRoundPoints to set
+	 */
+	public void setCurrentRoundPoints(int currentRoundPoints) {
+		this.currentRoundPoints = currentRoundPoints;
 	}
 
 	/**

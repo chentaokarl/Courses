@@ -58,7 +58,7 @@ public class EastPanel extends JPanel {
 		// javax.swing.ImageIcon(getClass().getResource("images/player.jpg")));
 		// // NOI18N
 
-		eastPlayerName.setText("east");
+		eastPlayerName.setText("null");
 
 		// eastCardImg.setIcon(new
 		// javax.swing.ImageIcon(getClass().getResource("images/card_back.jpg")));
@@ -141,10 +141,12 @@ public class EastPanel extends JPanel {
 	public void initData(PositionInitData positionData) {
 		setPositionNum(positionData.getPositionNum());
 		eastPlayerName.setText(positionData.getUserName());
-		eastPlayerImg.setIcon(Util.getImage(Util.DEFAULT_PLAYER_IMAGE));
+		eastPlayerImg.setIcon(Util.playerImage);
 		eastPlayerImg.validate();
 		eastPlayerName.validate();
 		eastPanel.validate();
+		repaint();
+		revalidate();
 	}
 
 	public void updateData(PositionData positionData) {
@@ -169,7 +171,9 @@ public class EastPanel extends JPanel {
 		eastCardsNum.validate();
 		eastPoints.validate();
 		eastBid.validate();
-		eastPanel.validate();
+		repaint();
+		revalidate();
+
 	}
 
 }

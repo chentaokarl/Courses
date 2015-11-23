@@ -16,7 +16,6 @@ import javax.print.DocFlavor.STRING;
  *
  */
 public class Message implements Serializable {
-	private String userName = null;
 	private PublicKey publicKey = null;
 	private String message=null;
 	private boolean toBidFlag=false;
@@ -43,19 +42,6 @@ public class Message implements Serializable {
 		this.publicKey = publicKey;
 	}
 
-	/**
-	 * @return the userName
-	 */
-	public String getUserName() {
-		return userName;
-	}
-
-	/**
-	 * @param userName the userName to set
-	 */
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
 	public void setMessage(String message) {
 		this.message = message;
 

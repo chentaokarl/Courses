@@ -63,7 +63,7 @@ public class NorthPanel extends JPanel {
 		northTotalPoints.setFont(new Font("Tahoma", 0, 30));
 		
 		northCardsNum.setText("Cards Left:");
-		northPlayerName.setText("north");
+		northPlayerName.setText("null");
 		northPoints.setText("Points:");
 		northBid.setText("Bid: ");
 		northTotalPoints.setText("Total Points:");
@@ -149,11 +149,12 @@ public class NorthPanel extends JPanel {
 	public void initData(PositionInitData positionData) {
 		setPositionNum(positionData.getPositionNum());
 		northPlayerName.setText(positionData.getUserName());
-		northPlayerImage.setIcon(Util.getImage(Util.DEFAULT_PLAYER_IMAGE));
+		northPlayerImage.setIcon(Util.playerImage);
 		northPlayerImage.validate();
 		northPlayerName.validate();
-		northPanel.validate();
-	}
+		repaint();
+		revalidate();
+}
 
 	public void updateData(PositionData positionData) {
 		String newText = null;
@@ -177,7 +178,9 @@ public class NorthPanel extends JPanel {
 		northCardsNum.validate();
 		northPoints.validate();
 		northBid.validate();
-		northPanel.validate();
+		repaint();
+		revalidate();
+
 	}
 
 }

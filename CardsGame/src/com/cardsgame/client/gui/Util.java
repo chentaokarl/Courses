@@ -5,8 +5,13 @@ import javax.swing.JLabel;
 
 public class Util {
 	public final static String DEFAULT_PLAYER_IMAGE = "images/player.jpg";
-	public final static String DEFAULT_NULL_PLAYER_IMAGE = "images/null_player.jpg";
-	
+	public final static String DEFAULT_NULL_PLAYER_IMAGE = "images/nullplayer.jpg";
+	public final static String IDENTIFER_CARDPLAYED =  "CardPlayed";
+	public final static String IDENTIFER_ROUND_WINNER =  "Round Winner";
+	public final static String IDENTIFER_GAME_WINNER =  "Game Over. Winner";
+	public final static String IDENTIFER_ERROR = "Error:";
+	public final static String DELIMITER = ":";
+	public final static String CARD_DELIMITER = ",";
 	public final static String DEFAULT_CARD_BACK_IMAGE = "images/card_back.jpg";
 	public final static String DEFAULT_CARD_IMG_PREFIX = "images/";
 	public final static String DEFAULT_CARD_IMG_SURFIX = ".jpg";
@@ -14,13 +19,14 @@ public class Util {
 	public final static ImageIcon playerImage =  new ImageIcon(Util.class.getResource(DEFAULT_PLAYER_IMAGE));
 	public final static ImageIcon nullPlayerImage =  new ImageIcon(Util.class.getResource(DEFAULT_NULL_PLAYER_IMAGE));
 	private final static ImageIcon cardbackImage =  new ImageIcon(Util.class.getResource(DEFAULT_CARD_BACK_IMAGE));
-	private static boolean isMyTurnFlag = true; //to indicate my turn or not. Only In my turn, I can play out card.
+	public static final String SERVER_NAME = "server";
+	private static boolean isMyTurnFlag = false; //to indicate my turn or not. Only In my turn, I can play out card.
 	private static boolean gameStartFlag = false;// to indicate game starts or not.
 	private static boolean gameOverFlag = false;
 	
 	public static JLabel getPlayerLabel(String labelName, ImageIcon newImage) {
 		if (null == newImage) {
-			return new JLabel(labelName, nullPlayerImage, JLabel.CENTER);
+			return new JLabel(labelName, playerImage, JLabel.CENTER);
 		}else{
 			return new JLabel(labelName, newImage, JLabel.CENTER);
 		}
