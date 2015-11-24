@@ -14,7 +14,7 @@ public class User {
 	int currentScore=0;
 	private String currentCard=null;
 	private int positionNum = Integer.MIN_VALUE;
-	private List<String> cardlist = new ArrayList<>();
+	private List<String> cardlist = null;
 	
 	public User(Socket socket){
 		userSocket = socket;

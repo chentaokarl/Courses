@@ -274,6 +274,13 @@ public class TableFrame extends javax.swing.JFrame {
 			CenterPanel.getInstance().updateEastCardPlayed("blank");
 			CenterPanel.getInstance().updateWestCardPlayed("blank");
 		}
+		
+		if (-1 == positionNum) {
+			CenterPanel.getInstance().updateSouthCardPlayed("blank");
+			CenterPanel.getInstance().updateEastCardPlayed("blank");
+			CenterPanel.getInstance().updateNorthCardPlayed("blank");
+			CenterPanel.getInstance().updateWestCardPlayed("blank");
+		}
 
 	}
 

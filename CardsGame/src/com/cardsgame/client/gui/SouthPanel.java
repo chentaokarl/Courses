@@ -3,10 +3,12 @@
  */
 package com.cardsgame.client.gui;
 
+import java.awt.CardLayout;
 import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.net.Socket;
 
+import javax.print.DocFlavor.STRING;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -20,6 +22,13 @@ import com.cardsgame.util.PositionInitData;
  *
  */
 public class SouthPanel extends JPanel {
+	// TotalPoints: Cards Left: Points: Bid:
+	public static final String TOTAL_POINTS = "TotalPoints:";
+	public static final String CARD_LEFT = "Cards Left:";
+	public static final String POINTS = "RoundPoints:";
+	public static final String BID = "Bid:";
+	public static final String DELIMITER = "	";
+
 	private static SouthPanel southPanel;
 	private javax.swing.JLabel southCardsNum;
 	private javax.swing.JPanel southCardsPanel;
@@ -36,7 +45,7 @@ public class SouthPanel extends JPanel {
 	private int positionNum = Integer.MIN_VALUE;
 	private MessageHandlerInterface messageHandler = null;
 	private Socket clientSocket = null;
-	
+	private JLabel currentPlayedCard = null;
 
 	private SouthPanel(MessageHandlerInterface mhi, Socket socket) {
 		super();
@@ -46,7 +55,7 @@ public class SouthPanel extends JPanel {
 
 	public static SouthPanel getInstance(MessageHandlerInterface messageHandler, Socket clientSocket) {
 		if (null == southPanel) {
-			southPanel = new SouthPanel(messageHandler,clientSocket);
+			southPanel = new SouthPanel(messageHandler, clientSocket);
 			southPanel.initComp();
 		}
 		return southPanel;
@@ -54,29 +63,36 @@ public class SouthPanel extends JPanel {
 
 	private void cardMouseClicked(MouseEvent evt) {
 		if (Util.isMyTurnFlag()) {
-			JLabel source = (JLabel) evt.getSource();
-//			PositionData positionData = new PositionData();
-//			positionData.setPositionNum(positionNum);
-//			positionData.setCardPlayed(source.getName());
+			currentPlayedCard = (JLabel) evt.getSource();
+			// PositionData positionData = new PositionData();
+			// positionData.setPositionNum(positionNum);
+			// positionData.setCardPlayed(source.getName());
 			try {
-//				Client.getInstance().sendMsg(source.getName());// send played card
-//				Client.getInstance().messageHandler.sendMsg(Client.getInstance().getClientSocket(), source.getName());
-				messageHandler.sendMsg(clientSocket, source.getName());
+				// Client.getInstance().sendMsg(source.getName());// send played
+				// card
+				// Client.getInstance().messageHandler.sendMsg(Client.getInstance().getClientSocket(),
+				// source.getName());
+				messageHandler.sendMsg(clientSocket, currentPlayedCard.getName());
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			CenterPanel.getInstance().updateSouthCardPlayed(source.getName());
-			cardsDisplayPanel.remove(source);
-			source = null;
+
+		} else {
+			// warning to be done.
+			TableFrame.getInstance(messageHandler, clientSocket).showInfoDialogue("Not your turn yet!");
+		}
+	}
+
+	public void playCard(String card) {
+		if (currentPlayedCard != null && currentPlayedCard.getName().equals(card)) {
+
+			CenterPanel.getInstance().updateSouthCardPlayed(card);
+			cardsDisplayPanel.remove(currentPlayedCard);
 			cardsDisplayPanel.repaint();
 			cardsDisplayPanel.validate();
 			southCardsPanel.validate();
 			southPanel.validate();
-		} else {
-			//warning to be done.
-			TableFrame.getInstance(messageHandler, clientSocket).showInfoDialogue("Not your turn yet!");
 		}
 	}
 
@@ -116,11 +132,11 @@ public class SouthPanel extends JPanel {
 
 		// southDisplayArea = new javax.swing.JTextArea();
 
-		 southCardsNum.setFont(new Font("Tahoma", 0, 30));
-		 southPoints.setFont(new Font("Tahoma", 0, 30));
-		 southPlayerName.setFont(new Font("Tahoma", 0, 30));
-		 southBid.setFont(new Font("Tahoma", 0, 30));
-		 southTotalPoints.setFont(new Font("Tahoma", 0, 30));
+		southCardsNum.setFont(new Font("Tahoma", 0, 30));
+		southPoints.setFont(new Font("Tahoma", 0, 30));
+		southPlayerName.setFont(new Font("Tahoma", 0, 30));
+		southBid.setFont(new Font("Tahoma", 0, 30));
+		southTotalPoints.setFont(new Font("Tahoma", 0, 30));
 
 		southCardsNum.setText("Cards Left: ");
 		southPlayerName.setText("south");
@@ -130,65 +146,66 @@ public class SouthPanel extends JPanel {
 
 		cardsDisplayPanel.setLayout(new javax.swing.BoxLayout(cardsDisplayPanel, javax.swing.BoxLayout.LINE_AXIS));
 
+		javax.swing.GroupLayout southCardsPanelLayout = new javax.swing.GroupLayout(southCardsPanel);
+		southCardsPanel.setLayout(southCardsPanelLayout);
+		southCardsPanelLayout
+				.setHorizontalGroup(
+						southCardsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(southCardsPanelLayout.createSequentialGroup()
+										.addGap(18, 18, 18).addComponent(cardsDisplayPanel,
+												javax.swing.GroupLayout.DEFAULT_SIZE, 1347, Short.MAX_VALUE)
+								.addGap(8, 8, 8)));
+		southCardsPanelLayout
+				.setVerticalGroup(southCardsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+						.addGroup(southCardsPanelLayout.createSequentialGroup().addGap(10, 10, 10)
+								.addComponent(cardsDisplayPanel, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
+		southPlayerName.setText("null");
 
-        javax.swing.GroupLayout southCardsPanelLayout = new javax.swing.GroupLayout(southCardsPanel);
-        southCardsPanel.setLayout(southCardsPanelLayout);
-        southCardsPanelLayout.setHorizontalGroup(
-            southCardsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(southCardsPanelLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(cardsDisplayPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 1347, Short.MAX_VALUE)
-                .addGap(8, 8, 8))
-        );
-        southCardsPanelLayout.setVerticalGroup(
-            southCardsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(southCardsPanelLayout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(cardsDisplayPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+		southInfoField.setText(TOTAL_POINTS + DELIMITER + CARD_LEFT + DELIMITER + POINTS + DELIMITER + BID);
+		southInfoField.setFont(new Font("Tahoma", 0, 30));
+		southInfoField.setEditable(false);
+		// southInfoField.addActionListener(new java.awt.event.ActionListener()
+		// {
+		// public void actionPerformed(java.awt.event.ActionEvent evt) {
+		// southInfoFieldActionPerformed(evt);
+		// }
+		// });
 
-        southPlayerName.setText("null");
-
-        southInfoField.setText("TotalPoints:	Cards Left:		Points:		Bid:	");
-        southInfoField.setFont(new Font("Tahoma", 0, 30));
-        southInfoField.setEditable(false);
-//        southInfoField.addActionListener(new java.awt.event.ActionListener() {
-//            public void actionPerformed(java.awt.event.ActionEvent evt) {
-//                southInfoFieldActionPerformed(evt);
-//            }
-//        });
-
-        javax.swing.GroupLayout southPanelLayout = new javax.swing.GroupLayout(southPanel);
-        southPanel.setLayout(southPanelLayout);
-        southPanelLayout.setHorizontalGroup(
-            southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(southPanelLayout.createSequentialGroup()
-                .addGap(65, 65, 65)
-                .addGroup(southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(southPlayerImg, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(southPlayerName))
-                .addGroup(southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(southCardsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(southInfoField, javax.swing.GroupLayout.PREFERRED_SIZE, 1383, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        southPanelLayout.setVerticalGroup(
-            southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(southPanelLayout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addGroup(southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(southPanelLayout.createSequentialGroup()
-                        .addComponent(southPlayerImg, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(southPlayerName))
-                    .addGroup(southPanelLayout.createSequentialGroup()
-                        .addComponent(southCardsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(southInfoField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 8, Short.MAX_VALUE))
-        );
+		javax.swing.GroupLayout southPanelLayout = new javax.swing.GroupLayout(southPanel);
+		southPanel.setLayout(southPanelLayout);
+		southPanelLayout.setHorizontalGroup(southPanelLayout
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(southPanelLayout.createSequentialGroup().addGap(65, 65, 65)
+						.addGroup(southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+								.addComponent(southPlayerImg, javax.swing.GroupLayout.PREFERRED_SIZE, 160,
+										javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(southPlayerName))
+						.addGroup(southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+								.addComponent(southCardsPanel, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(southInfoField, javax.swing.GroupLayout.PREFERRED_SIZE, 1383,
+										javax.swing.GroupLayout.PREFERRED_SIZE))
+						.addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+		southPanelLayout.setVerticalGroup(southPanelLayout
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(southPanelLayout.createSequentialGroup().addGap(0, 0, 0)
+						.addGroup(southPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(southPanelLayout.createSequentialGroup()
+										.addComponent(southPlayerImg, javax.swing.GroupLayout.PREFERRED_SIZE, 158,
+												javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addComponent(southPlayerName))
+								.addGroup(southPanelLayout.createSequentialGroup()
+										.addComponent(southCardsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 172,
+												javax.swing.GroupLayout.PREFERRED_SIZE)
+										.addGap(0, 0, 0).addComponent(southInfoField,
+												javax.swing.GroupLayout.PREFERRED_SIZE,
+												javax.swing.GroupLayout.DEFAULT_SIZE,
+												javax.swing.GroupLayout.PREFERRED_SIZE)))
+						.addGap(0, 8, Short.MAX_VALUE)));
 	}
 
 	protected void initLabelMouseClicked(MouseEvent evt) {
@@ -204,7 +221,8 @@ public class SouthPanel extends JPanel {
 	}
 
 	/**
-	 * @param positionNum the positionNum to set
+	 * @param positionNum
+	 *            the positionNum to set
 	 */
 	public void setPositionNum(int positionNum) {
 		this.positionNum = positionNum;
@@ -220,52 +238,51 @@ public class SouthPanel extends JPanel {
 		repaint();
 		revalidate();
 	}
-	
-	//TotalPoints:Cards Left:		Points:		Bid:	
-	public void updateData(PositionData positionData){
-		String newText = null;
+
+	// TotalPoints:Cards Left: Points: Bid:
+	//TOTAL_POINTS + DELIMITER + CARD_LEFT + DELIMITER + POINTS + DELIMITER + BID
+	public void updateData(PositionData positionData) {
+		String newText = southInfoField.getText();
 		if (Integer.MIN_VALUE != positionData.getTotalPoints()) {
-			 newText = getDisplayString(southInfoField.getText().indexOf(":"), southInfoField.getText().indexOf("Cards Left:"), positionData.getTotalPoints());
+//			newText = getDisplayString(southInfoField.getText(),southInfoField.getText().indexOf(":"),
+//					southInfoField.getText().indexOf(CARD_LEFT), positionData.getTotalPoints());
+			newText = newText.substring(0,newText.indexOf(":") + 1) + positionData.getTotalPoints() + DELIMITER + newText.substring(newText.indexOf(CARD_LEFT));
 		}
 		if (Integer.MIN_VALUE != positionData.getCardsLeft()) {
-			if (null != newText) {
-				newText = getDisplayString(newText.indexOf("Cards Left:") + 10, newText.indexOf("Points:"), positionData.getCardsLeft());
-			}else{
-				newText = getDisplayString(southInfoField.getText().indexOf("Cards Left:") + 10, southInfoField.getText().indexOf("Points:"), positionData.getCardsLeft());
-			}
+//				newText = getDisplayString(newText,newText.indexOf(CARD_LEFT) + 10, newText.indexOf(POINTS),
+//						positionData.getCardsLeft());
+			newText = newText.substring(0,newText.indexOf(CARD_LEFT) + 11) + positionData.getCardsLeft() + DELIMITER + newText.substring(newText.indexOf(POINTS));
 		}
 		if (Integer.MIN_VALUE != positionData.getCurrentRoundPoints()) {
-			if (null != newText) {
-				newText = getDisplayString(newText.indexOf("Points:") + 6, newText.indexOf("Bid:"), positionData.getCurrentRoundPoints());
-			}else{
-				newText = getDisplayString(southInfoField.getText().indexOf("Points:") + 6, southInfoField.getText().indexOf("Bid:"), positionData.getCurrentRoundPoints());
-			}
+//				newText = getDisplayString(newText, newText.indexOf(POINTS) + 6, newText.indexOf(BID),
+//						positionData.getCurrentRoundPoints());
+			newText = newText.substring(0,newText.indexOf(POINTS) + 12) + positionData.getCurrentRoundPoints() + DELIMITER + newText.substring(newText.indexOf(BID));
 		}
 		if (Integer.MIN_VALUE != positionData.getBid()) {
-			if (null != newText) {
-				newText = getDisplayString(newText.lastIndexOf(":"), newText.length() - 1, positionData.getBid());
-			}else{
-				newText = getDisplayString(southInfoField.getText().lastIndexOf(":") , southInfoField.getText().length() - 1, positionData.getBid());
-			}
+				newText = newText.substring(0, newText.lastIndexOf(":") + 1) + positionData.getBid();
 		}
-		
+
+		if (null != positionData.getCardPlayed()) {
+			CenterPanel.getInstance().updateSouthCardPlayed(positionData.getCardPlayed());
+			playCard(positionData.getCardPlayed());
+		}
+
 		southInfoField.setText(newText);
 		southInfoField.repaint();
 		southInfoField.revalidate();
 		southCardsPanel.validate();
 		repaint();
 		revalidate();
-}
-	
-	private String getDisplayString(int firstIndex, int secondIndex, int newData){
-		StringBuilder displayStringBuilder = new StringBuilder();
-		displayStringBuilder.append(southInfoField.getText().substring(0, firstIndex + 1));
-		displayStringBuilder.append("  ");
-		displayStringBuilder.append(newData);
-		displayStringBuilder.append("	");
-		displayStringBuilder.append(southInfoField.getText().substring(secondIndex));
-		
-		return displayStringBuilder.toString();
 	}
+
+//	private String getDisplayString(String original, int firstIndex, int secondIndex, int newData) {
+//		StringBuilder displayStringBuilder = new StringBuilder();
+//		displayStringBuilder.append(original.substring(0, firstIndex + 1));
+//		displayStringBuilder.append(newData);
+//		displayStringBuilder.append("	");
+//		displayStringBuilder.append(original.substring(secondIndex));
+//
+//		return displayStringBuilder.toString();
+//	}
 
 }

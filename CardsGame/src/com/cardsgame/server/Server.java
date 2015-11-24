@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.net.ServerSocketFactory;
@@ -35,16 +36,17 @@ public class Server {
 
 		try {
 			System.setProperty("javax.net.ssl.keyStore", "src/mysocket.jks");
-		    System.setProperty("javax.net.ssl.keyStorePassword", "mysocket");
-//			serverSocket = new ServerSocket(12345);
-			 ServerSocketFactory factory = SSLServerSocketFactory.getDefault();  
-			 serverSocket = factory.createServerSocket(9999);  
+			System.setProperty("javax.net.ssl.keyStorePassword", "mysocket");
+			// serverSocket = new ServerSocket(12345);
+			ServerSocketFactory factory = SSLServerSocketFactory.getDefault();
+			serverSocket = factory.createServerSocket(9999);
 		} catch (IOException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 			System.err.println("Could not listen on port: " + 9999);
 			System.exit(-1);
 		}
 		
+
 		try {
 			initializeCards();
 			setup();
@@ -58,8 +60,9 @@ public class Server {
 				starter = (starter + 1) % 4;
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+			
 		}
 	}
 
@@ -87,50 +90,51 @@ public class Server {
 		}
 	}
 
-	public void setup() throws Exception{
-			MessageHandlerInterface mhi = new MessageHandler();
+	public void setup() throws Exception {
+		MessageHandlerInterface mhi = new MessageHandler();
 
-			for (int i = 0; i < 4; i++) {
-				System.out.println("Waiting for connection");
-				user[i] = new User(serverSocket.accept());
-				user[i].setPositionNum(i + 1);
-				String userName = "User" + (i + 1);
-				user[i].setUserName(userName);
-				System.out.println("User " + userName + " connected");
-				Message sMsg = null;
+		for (int i = 0; i < 4; i++) {
+			System.out.println("Waiting for connection");
+			user[i] = new User(serverSocket.accept());
+			user[i].setPositionNum(i + 1);
+			String userName = "User" + (i + 1);
+			user[i].setUserName(userName);
+			System.out.println("User " + userName + " connected");
+			Message sMsg = null;
 
-				PositionInitData[] positionInitDatas = new PositionInitData[i + 1];
-				for (int k = 0; k < positionInitDatas.length; k++) {
-					positionInitDatas[k] = new PositionInitData();
-					positionInitDatas[k].setUserName(user[k].getUserName());
-					positionInitDatas[k].setPositionNum(user[k].getPositionNum());
-				}
-				// send current user list to the other users in the list
-				for (int j = 0; j <= i; j++) {
-					if (j == i) {
-						sMsg = new Message();
-//						sMsg.setPublicKey(KeysManager.getInstance().getMyPublicKey());
-						sMsg.setPositionInitDatas(positionInitDatas);
-						sMsg.setPositionNum(user[i].getPositionNum());
-						mhi.sendMsg(user[i].getUserSocket(), sMsg);
-					} else {
-						// update old users' table
-						mhi.sendMsg(user[j].getUserSocket(), positionInitDatas[i]);
-					}
-				}
-
-				// read public key;
-				// set user public key.
-//				Key symKey = (Key) mhi.readMsg(user[i].getUserSocket());
-//				KeysManager.getInstance().putUserSymKey(user[i].getUserName(), symKey);
-//				System.out.println(mhi.readMsg(user[i].getUserSocket()));
-
-				if (i != 3) {
-					System.out.println("Waiting for " + (3 - i) + " more connections");
-				} else
-					System.out.println("Game Start");
-
+			PositionInitData[] positionInitDatas = new PositionInitData[i + 1];
+			for (int k = 0; k < positionInitDatas.length; k++) {
+				positionInitDatas[k] = new PositionInitData();
+				positionInitDatas[k].setUserName(user[k].getUserName());
+				positionInitDatas[k].setPositionNum(user[k].getPositionNum());
 			}
+			// send current user list to the other users in the list
+			for (int j = 0; j <= i; j++) {
+				if (j == i) {
+					sMsg = new Message();
+					// sMsg.setPublicKey(KeysManager.getInstance().getMyPublicKey());
+					sMsg.setPositionInitDatas(positionInitDatas);
+					sMsg.setPositionNum(user[i].getPositionNum());
+					mhi.sendMsg(user[i].getUserSocket(), sMsg);
+				} else {
+					// update old users' table
+					mhi.sendMsg(user[j].getUserSocket(), positionInitDatas[i]);
+				}
+			}
+
+			// read public key;
+			// set user public key.
+			// Key symKey = (Key) mhi.readMsg(user[i].getUserSocket());
+			// KeysManager.getInstance().putUserSymKey(user[i].getUserName(),
+			// symKey);
+			// System.out.println(mhi.readMsg(user[i].getUserSocket()));
+
+			if (i != 3) {
+				System.out.println("Waiting for " + (3 - i) + " more connections");
+			} else
+				System.out.println("Game Start");
+
+		}
 
 	}
 
@@ -140,21 +144,28 @@ public class Server {
 
 	public void sendCards(int starter) throws Exception {
 		MessageHandlerInterface mhiSend = new MessageHandler();
-		int start = 0;
-		int end = 13;
+		int cardsHeader = 0;
 		for (int i = 0; i < 4; i++) {
-			starter = starter % 4;
-			user[starter].setCardlist(cards.subList(start, end));
-//			ArrayList<String> cardsSubList = (ArrayList<String>) cards.subList(start, end).toArray();
+			int cardsAmount = 13;
+			List<String> tempList = null;
+			if (null == user[i].getCardlist()) {
+				tempList = new ArrayList<>();
+			} else {
+				tempList = user[i].getCardlist();
+			}
+			cardsHeader = cardsAmount * i;
+			for (; cardsAmount > 0; cardsAmount--) {
+				tempList.add(cards.get(cardsHeader + cardsAmount - 1));
+			}
+			user[i].setCardlist(tempList);
+
 			StringBuilder cardsString = new StringBuilder();
-			for(String card : cards.subList(start, end)){
+			for (String card : tempList) {
 				cardsString.append(card.trim());
 				cardsString.append(Util.CARD_DELIMITER);
 			}
-			mhiSend.sendMsg(user[i].getUserSocket(), cardsString.substring(0, cardsString.lastIndexOf(Util.CARD_DELIMITER)));
-			start = start + 13;
-			end = end + 13;
-			starter++;
+			mhiSend.sendMsg(user[i].getUserSocket(),
+					cardsString.substring(0, cardsString.lastIndexOf(Util.CARD_DELIMITER)));
 		}
 	}
 
@@ -164,15 +175,26 @@ public class Server {
 		for (int i = 0; i < 4; i++) {
 			Message msg = new Message();
 			// set toBidFlag==true
-			msg.setToBidFlag(true);
-			msg.setMessage("It's your turn to bid");
+			msg.setMessage(user[i].getUserName() + "'s turn to bid");
+			msg.setToBidFlag(false);
+			for (int y = 0; y < user.length; y++) {
+				if (y != i) {
+					try {
+						mhiBid.sendMsg(this.user[y].getUserSocket(), msg);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
 
+			msg.setToBidFlag(true);
 			while (bidN < 0 || bidN > 13) {
 				try {
 					mhiBid.sendMsg(this.user[i].getUserSocket(), msg);
 					mhiBid = new MessageHandler();
 					bidN = Integer.parseInt((String) mhiBid.readMsg(this.user[i].getUserSocket()));
-					System.out.println(user[i].getUserName() + ":"+bidN);
+					System.out.println(user[i].getUserName() + ":" + bidN);
 					if (bidN < 0 || bidN > 13) {
 						msg.setMessage("Error: Not right data format. Please bid 0-13!");
 					}
@@ -209,28 +231,39 @@ public class Server {
 		String cardN = null;
 		int roundStarter = starter;
 		int j = starter;
-		String roundSuit = null;
 		// first round
 		for (int k = 0; k < 13; k++) {
+			String roundSuit = null;
 			j = roundStarter;
 			for (int i = 0; i < 4; i++) {
 				j = j % 4;
 				Message msg = new Message();
 				// set toPlayFlag==true
-				msg.setToPlayFlag(true);
+				msg.setToPlayFlag(false);
 				msg.setMessage(user[j].getUserName() + "'s turn to play");
-				try {
-					mhiPlay.sendMsg(this.user[j].getUserSocket(), msg);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				// send to other users
+				for (int q = 0; q < user.length; q++) {
+					if (q != j) {
+						mhiPlay.sendMsg(this.user[q].getUserSocket(), msg);
+					}
 				}
+				msg.setToPlayFlag(true);
 				// block till get valid cardN
-				while (cardN == null || !cardisValid(user[j], cardN, roundSuit)) {
+				boolean cardValuedFlag = false;
+				while (!cardValuedFlag) {
 					try {
+						mhiPlay.sendMsg(this.user[j].getUserSocket(), msg);
 						cardN = (String) mhiPlay.readMsg(this.user[j].getUserSocket());
+						if (cardisValid(user[j].getCardlist(), cardN, roundSuit)) {
+							cardValuedFlag = true;
+						} else {
+							mhiPlay.sendMsg(this.user[j].getUserSocket(),
+									Util.IDENTIFER_ERROR + ": Not a valued card.");
+						}
 					} catch (Exception e) {
 						cardN = null;
+						cardValuedFlag = false;
+						mhiPlay.sendMsg(this.user[j].getUserSocket(), Util.IDENTIFER_ERROR + ": Not a valued card.");
 						e.printStackTrace();
 					}
 
@@ -271,17 +304,20 @@ public class Server {
 		if (temp >= 0) {
 			winner = temp;
 			// send winner to all
-			for (int i = 0; i < 4; i++) {
+			for (int p = 0; p < 4; p++) {
 				try {
-					mhiPlay.sendMsg(user[i].getUserSocket(), Util.IDENTIFER_GAME_WINNER +  Util.DELIMITER + user[winner].getUserName() + " and " +user[winner + 2].getUserName() + ". TotalPoints=" + user[winner].totalScore);
+					mhiPlay.sendMsg(user[p].getUserSocket(),
+							Util.IDENTIFER_GAME_WINNER + Util.DELIMITER + user[winner].getUserName() + " and "
+									+ user[winner + 2].getUserName() + ". TotalPoints=" + user[winner].totalScore);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
+			Thread.sleep(5000);
 			// end game
 		} else {
-			//upate users' data
+			// upate users' data
 			PositionData roundEndData = null;
 			for (int l = 0; l < user.length; l++) {
 				roundEndData = new PositionData();
@@ -290,37 +326,41 @@ public class Server {
 				roundEndData.setCurrentRoundPoints(0);
 				roundEndData.setTotalPoints(user[l].totalScore);
 				roundEndData.setPositionNum(user[l].getPositionNum());
-				mhiPlay.sendMsg(this.user[l].getUserSocket(), roundEndData);
+				for (int h = 0; h < user.length; h++) {
+					mhiPlay.sendMsg(this.user[h].getUserSocket(), roundEndData);
+				}
 			}
 		}
 	}
 
-	public boolean cardisValid(User user, String card, String roundSuit) {
-		if (null == card) {
+	public boolean cardisValid(List<String> userCurrentCards, String card, String roundSuit) {
+		if (null == card && card.length() != 2) {
 			return false;
 		}
-		if (user.getCardlist().contains(card)) {
+		if (userCurrentCards.contains(card)) {
 			if (roundSuit != null) {
-
-				if (user.getCardlist().contains(roundSuit + "1") || user.getCardlist().contains(roundSuit + "2")
-						|| user.getCardlist().contains(roundSuit + "3") || user.getCardlist().contains(roundSuit + "4")
-						|| user.getCardlist().contains(roundSuit + "5") || user.getCardlist().contains(roundSuit + "6")
-						|| user.getCardlist().contains(roundSuit + "7") || user.getCardlist().contains(roundSuit + "8")
-						|| user.getCardlist().contains(roundSuit + "9") || user.getCardlist().contains(roundSuit + "10")
-						|| user.getCardlist().contains(roundSuit + "11")
-						|| user.getCardlist().contains(roundSuit + "12")
-						|| user.getCardlist().contains(roundSuit + "13")) {
-					if (card.substring(0, 1).equals(roundSuit)) {
+				if (card.startsWith(roundSuit)) {
+					int number = Integer.parseInt(card.substring(1));
+					if (number > 0 && number < 14) {
 						return true;
-					} else
-						return false;
-				} else
-					return true;
-			} else
+					}
+				} else {
+					int i = 0;
+					for (String tempCard : userCurrentCards) {
+						if (tempCard.startsWith(roundSuit)) {
+							break;
+						}
+						i++;
+					}
+					if (i >= userCurrentCards.size()) {
+						return true;
+					}
+				}
+			} else {
 				return true;
-
-		} else
-			return false;
+			}
+		}
+		return false;
 	}
 
 	public int setRoundWinner(int roundStarter) {
@@ -330,6 +370,9 @@ public class Server {
 		String number = user[i].getCurrentCard().substring(1);
 		int tranferToNumber = Integer.parseInt(number);
 
+		if (1 == tranferToNumber) {
+			return indexOfCurrentWinner;
+		}
 		for (int j = 0; j < 3; j++) {
 			i++;
 			i = i % 4;
@@ -338,6 +381,10 @@ public class Server {
 
 				String number1 = user[i].getCurrentCard().substring(1);
 				int tranferToNumber1 = Integer.parseInt(number1);
+				if (tranferToNumber1 == 1) {
+					indexOfCurrentWinner = i;
+					break;
+				}
 				if (tranferToNumber1 > tranferToNumber) {
 					indexOfCurrentWinner = i;
 					tranferToNumber = tranferToNumber1;
@@ -353,23 +400,29 @@ public class Server {
 		int teamTotalBid = user[0].bidNumber + user[2].bidNumber;
 		if (teamCurrentTricks >= teamTotalBid) {
 			user[0].currentScore = teamCurrentTricks - teamTotalBid + 10 * teamTotalBid;
-			user[0].totalScore += user[0].currentScore;
-			user[0].points = 0;
-			user[2].totalScore = user[0].totalScore;
-			user[2].points = 0;
+		} else {
+			user[0].currentScore = teamTotalBid * (-10);
 		}
+		user[0].totalScore += user[0].currentScore;
+		user[0].points = 0;
+		user[2].totalScore = user[0].totalScore;
+		user[2].points = 0;
+		user[2].currentScore = user[0].currentScore;
 
 		teamCurrentTricks = user[1].points + user[3].points;
 		teamTotalBid = user[1].bidNumber + user[3].bidNumber;
 		if (teamCurrentTricks >= teamTotalBid) {
 			user[1].currentScore = teamCurrentTricks - teamTotalBid + 10 * teamTotalBid;
-			user[1].totalScore += user[1].currentScore;
-			user[1].points = 0;
-			user[3].totalScore = user[1].totalScore;
-			user[3].points = 0;
+		} else {
+			user[1].currentScore = teamTotalBid * (-10);
 		}
+		user[1].totalScore += user[1].currentScore;
+		user[1].points = 0;
+		user[3].totalScore = user[1].totalScore;
+		user[3].points = 0;
+		user[3].currentScore = user[1].currentScore;
 
-		if (user[0].totalScore > 250 && user[1].totalScore > 250) {
+		if (user[0].totalScore > Util.FINAL_SCORE && user[1].totalScore > Util.FINAL_SCORE) {
 			if (user[0].totalScore > user[1].totalScore) {
 				return 0;
 			} else {
@@ -377,11 +430,11 @@ public class Server {
 			}
 		}
 
-		if (user[0].totalScore > 250) {
+		if (user[0].totalScore > Util.FINAL_SCORE) {
 			return 0;
 		}
 
-		if (user[1].totalScore > 250) {
+		if (user[1].totalScore > Util.FINAL_SCORE) {
 			return 1;
 		}
 		//

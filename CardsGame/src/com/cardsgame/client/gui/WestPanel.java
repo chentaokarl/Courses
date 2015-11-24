@@ -17,7 +17,7 @@ import com.cardsgame.util.PositionInitData;
  */
 public class WestPanel extends JPanel {
 
-	private static WestPanel westPanel = new WestPanel();
+	private static WestPanel westPanel ;
 	private javax.swing.JLabel westCardImg;
 	private javax.swing.JLabel westCardsNum;
 	private javax.swing.JLabel westPlayerImg;
@@ -32,7 +32,10 @@ public class WestPanel extends JPanel {
 	}
 
 	public static WestPanel getInstance() {
-		westPanel.initComp();
+		if (null == westPanel) {
+			westPanel = new WestPanel();
+			westPanel.initComp();
+		}
 		return westPanel;
 	}
 
@@ -52,9 +55,9 @@ public class WestPanel extends JPanel {
 		westTotalPoints.setFont(new Font("Tahoma", 0, 30));
 
 		westPlayerName.setText("  ");
-		westCardsNum.setText("Cards Left: ");
-		westPoints.setText("Points: ");
-		westBid.setText("Bid: ");
+		westCardsNum.setText("Cards Left:  ");
+		westPoints.setText("Points:  ");
+		westBid.setText("Bid:  ");
 		westTotalPoints.setText("Total Points: ");
 
 
@@ -138,16 +141,16 @@ public class WestPanel extends JPanel {
 	public void updateData(PositionData positionData) {
 		String newText = null;
 		if (Integer.MIN_VALUE != positionData.getTotalPoints()) {
-			westTotalPoints.setText("" + positionData.getTotalPoints());
+			westTotalPoints.setText("TotalPoints:" + positionData.getTotalPoints());
 		} 
 		if (Integer.MIN_VALUE != positionData.getCardsLeft()) {
-			westCardsNum.setText("" + positionData.getCardsLeft());
+			westCardsNum.setText("Card Left:" + positionData.getCardsLeft());
 		} 
 		if (Integer.MIN_VALUE != positionData.getCurrentRoundPoints()) {
-			westPoints.setText("" + positionData.getCurrentRoundPoints());
+			westPoints.setText("Points:" + positionData.getCurrentRoundPoints());
 		} 
 		if (Integer.MIN_VALUE != positionData.getBid()) {
-			westBid.setText("" + positionData.getBid());
+			westBid.setText("Bid:" + positionData.getBid());
 		}
 		
 		if (null != positionData.getCardPlayed()) {

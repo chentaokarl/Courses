@@ -152,16 +152,16 @@ public class EastPanel extends JPanel {
 	public void updateData(PositionData positionData) {
 		String newText = null;
 		if (Integer.MIN_VALUE != positionData.getTotalPoints()) {
-			eastTotalPoints.setText("" + positionData.getTotalPoints());
+			eastTotalPoints.setText("TotalPoints:" + positionData.getTotalPoints());
 		} 
 		if (Integer.MIN_VALUE != positionData.getCardsLeft()) {
-			eastCardsNum.setText("" + positionData.getCardsLeft());
+			eastCardsNum.setText("Cards Left:" + positionData.getCardsLeft());
 		} 
 		if (Integer.MIN_VALUE != positionData.getCurrentRoundPoints()) {
-			eastPoints.setText("" + positionData.getCurrentRoundPoints());
+			eastPoints.setText("Points:" + positionData.getCurrentRoundPoints());
 		} 
 		if (Integer.MIN_VALUE != positionData.getBid()) {
-			eastBid.setText("" + positionData.getBid());
+			eastBid.setText("Bid:" + positionData.getBid());
 		}
 		if (null != positionData.getCardPlayed()) {
 			CenterPanel.getInstance().updateEastCardPlayed(positionData.getCardPlayed());

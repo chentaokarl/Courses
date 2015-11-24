@@ -61,7 +61,11 @@ public class CenterPanel extends JPanel {
 	}
 
 	public void updateCenterInfo(String text){
-		centerPanelDisplay.setText(text);
+		if(centerPanelDisplay.getText().startsWith(Util.IDENTIFER_ROUND_WINNER)){
+		centerPanelDisplay.setText(text + "\n" + centerPanelDisplay.getText());
+		}else{
+			centerPanelDisplay.setText(text);
+		}
 		revalidate();
 		repaint();
 	}

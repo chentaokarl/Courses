@@ -159,16 +159,16 @@ public class NorthPanel extends JPanel {
 	public void updateData(PositionData positionData) {
 		String newText = null;
 		if (Integer.MIN_VALUE != positionData.getTotalPoints()) {
-			northTotalPoints.setText("" + positionData.getTotalPoints());
+			northTotalPoints.setText("Total Points:" + positionData.getTotalPoints());
 		} 
 		if (Integer.MIN_VALUE != positionData.getCardsLeft()) {
-			northCardsNum.setText("" + positionData.getCardsLeft());
+			northCardsNum.setText("Cards Left:" + positionData.getCardsLeft());
 		} 
 		if (Integer.MIN_VALUE != positionData.getCurrentRoundPoints()) {
-			northPoints.setText("" + positionData.getCurrentRoundPoints());
+			northPoints.setText("Points:" + positionData.getCurrentRoundPoints());
 		} 
 		if (Integer.MIN_VALUE != positionData.getBid()) {
-			northBid.setText("" + positionData.getBid());
+			northBid.setText("Bid:" + positionData.getBid());
 		}
 		
 		if (null != positionData.getCardPlayed()) {
