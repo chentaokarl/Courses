@@ -11,8 +11,10 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import javax.net.SocketFactory;
+import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
+import com.cardsgame.server.SSLSocketKeystoreFactory;
 import com.cardsgame.util.Message;
 import com.cardsgame.util.MessageHandler;
 import com.cardsgame.util.MessageHandlerInterface;
@@ -24,7 +26,7 @@ import com.cardsgame.util.PositionInitData;
  *
  */
 public class Client {
-	public Socket clientSocket = null;
+	public SSLSocket clientSocket = null;
 	public ObjectOutputStream oos = null;
 	public ObjectInputStream ois = null;
 	MessageHandlerInterface messageHandler = null;
@@ -51,10 +53,12 @@ public class Client {
 
 	public boolean connect() throws Exception {
 		try {
-			System.setProperty("javax.net.ssl.trustStore", "src/mysocket.jks");
-			System.setProperty("javax.net.ssl.trustStorePassword", "mysocket");
-			SocketFactory factory = SSLSocketFactory.getDefault();
-			clientSocket = factory.createSocket(SERVER_IP, SERVER_PORT);
+//			System.setProperty("javax.net.ssl.trustStore", "/mysocket.jks");
+//			System.setProperty("javax.net.ssl.trustStorePassword", "mysocket");
+//			SocketFactory factory = SSLSocketFactory.getDefault();
+//			clientSocket = factory.createSocket(SERVER_IP, SERVER_PORT);
+			clientSocket = SSLSocketKeystoreFactory.getSocketWithCert(SERVER_IP, SERVER_PORT, 
+					   getClass().getResourceAsStream("mysocket.jks"), "mysocket");
 			// oos = new ObjectOutputStream(clientSocket.getOutputStream());
 			// ois = new ObjectInputStream(clientSocket.getInputStream());
 			// mhi = new MessageHandler();

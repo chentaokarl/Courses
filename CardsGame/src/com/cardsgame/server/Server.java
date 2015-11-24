@@ -5,12 +5,18 @@ package com.cardsgame.server;
  */
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.net.ServerSocketFactory;
+import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 
 import com.cardsgame.client.gui.Util;
@@ -26,7 +32,7 @@ import com.cardsgame.util.PositionInitData;
  */
 
 public class Server {
-	private ServerSocket serverSocket = null;
+	private SSLServerSocket serverSocket = null;
 	User[] user = new User[4];
 	ArrayList<String> cards = new ArrayList();
 	// initialize cards
@@ -35,15 +41,23 @@ public class Server {
 	public Server() {
 
 		try {
-			System.setProperty("javax.net.ssl.keyStore", "src/mysocket.jks");
-			System.setProperty("javax.net.ssl.keyStorePassword", "mysocket");
+			
+//			System.setProperty("javax.net.ssl.keyStore", this.getClass().getResource("mysocket.jks").toString());
+//			System.setProperty("javax.net.ssl.keyStorePassword", "mysocket");
 			// serverSocket = new ServerSocket(12345);
+			
+			
 			ServerSocketFactory factory = SSLServerSocketFactory.getDefault();
-			serverSocket = factory.createServerSocket(9999);
+			serverSocket = SSLServerSocketKeystoreFactory.getServerSocketWithCert(9999, 
+					   getClass().getResourceAsStream("mysocket.jks"), "mysocket");
+//			serverSocket = factory.createServerSocket(9999);
 		} catch (IOException e) {
 //			e.printStackTrace();
 			System.err.println("Could not listen on port: " + 9999);
 			System.exit(-1);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+//			e.printStackTrace();
 		}
 		
 

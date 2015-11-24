@@ -1,4 +1,4 @@
-//package com.cardsgame.util.keys;
+package com.cardsgame.util.keys;
 //
 //import java.io.File;
 //import java.io.FileInputStream;
@@ -22,7 +22,7 @@
 //import com.cardsgame.util.Encryption;
 //import com.cardsgame.util.EncryptionException;
 //
-//public class KeysManager {
+public class KeysManager {
 //	private static KeysManager pKeyManager = new KeysManager();
 //	private String keysPath = this.getClass().getResource("").getFile();
 //
@@ -237,4 +237,4 @@
 //	}
 //	
 //	
-//}
+}

@@ -114,12 +114,12 @@ public class TableFrame extends javax.swing.JFrame {
 		return tableFrame;
 	}
 
-	public static void main(String[] args) {
-//		TableFrame.getInstance();
-//		SouthPanel.getInstance().initCardsPanel(
-//				new String[] { "c1", "d2", "h3", "s4", "c5", "d6", "h7", "s8", "c9", "d10", "h11", "s12", "c13" });
-		// TableFrame.getInstance().showBidDialogue();
-	}
+//	public static void main(String[] args) {
+////		TableFrame.getInstance();
+////		SouthPanel.getInstance().initCardsPanel(
+////				new String[] { "c1", "d2", "h3", "s4", "c5", "d6", "h7", "s8", "c9", "d10", "h11", "s12", "c13" });
+//		// TableFrame.getInstance().showBidDialogue();
+//	}
 
 	public void updateCenterTable(String cardName, int position) {
 		if (SouthPanel.getInstance(messageHandler,clientSocket).getPositionNum() == position) {

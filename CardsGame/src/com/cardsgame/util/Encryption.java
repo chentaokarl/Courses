@@ -1,4 +1,4 @@
-//package com.cardsgame.util;
+package com.cardsgame.util;
 //
 //import java.io.Serializable;
 //import java.security.Key;
@@ -9,7 +9,7 @@
 //
 //import com.cardsgame.util.keys.KeysManager;
 //
-//public class Encryption {
+public class Encryption {
 //	public static final String ALGORITHM = "RSA";
 //	public static final String SYM_ALGORITHM = "AES";
 //	public static final String PADDING = "RSA/ECB/PKCS1Padding";
@@ -65,4 +65,4 @@
 //		return rcv.getObject(cipher);
 //	}
 //
-//}
+}
