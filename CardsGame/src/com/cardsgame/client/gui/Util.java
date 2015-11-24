@@ -20,7 +20,7 @@ public class Util {
 	public final static ImageIcon nullPlayerImage =  new ImageIcon(Util.class.getResource(DEFAULT_NULL_PLAYER_IMAGE));
 	private final static ImageIcon cardbackImage =  new ImageIcon(Util.class.getResource(DEFAULT_CARD_BACK_IMAGE));
 	public static final String SERVER_NAME = "server";
-	public static final int FINAL_SCORE = 10;
+	public static final int FINAL_SCORE = 250;
 	private static boolean isMyTurnFlag = false; //to indicate my turn or not. Only In my turn, I can play out card.
 	private static boolean gameStartFlag = false;// to indicate game starts or not.
 	private static boolean gameOverFlag = false;

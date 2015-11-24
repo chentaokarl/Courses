@@ -4,15 +4,8 @@ package com.cardsgame.server;
  * 
  */
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.net.ServerSocketFactory;
